@@ -27,6 +27,12 @@
         <link rel="stylesheet" href="adminlte/plugins/daterangepicker/daterangepicker.css">
         <!-- summernote -->
         <link rel="stylesheet" href="adminlte/plugins/summernote/summernote-bs4.min.css">
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
+
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+
     </head>
 
     <body class="hold-transition sidebar-mini layout-fixed">

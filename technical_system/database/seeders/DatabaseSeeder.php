@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
 use App\Models\Note;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Note::factory(100)->create();
+        Customer::factory(50)->create();
     }
 }
