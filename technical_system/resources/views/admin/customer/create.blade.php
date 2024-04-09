@@ -1,3 +1,5 @@
-<div>
-    <!-- Very little is needed to make a happy life. - Marcus Aurelius -->
-</div>
+<x-admin.nav>
+    <div class="container pt-2">
+        
+    </div>
+</x-admin.nav>

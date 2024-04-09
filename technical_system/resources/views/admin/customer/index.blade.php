@@ -1,11 +1,11 @@
 <x-admin.nav>
-    
+    @isset($message)
     <x-admin.alert>
-        This is a primary alert—check it out!
+            {{ $message }}
     </x-admin.alert>
-    <div class="container">
+    @endisset
+    <div class="container pt-2">
         <a class="btn btn-primary" href="{{ route('customer.create')}}" role="button">Create New Customer</a>
-        <h1 style="text-align: center;">Customers</h1>
         <table id="example" class="display">
             <thead>
                 <tr>
@@ -30,12 +30,12 @@
                 @endforeach
             </tbody>
         </table>
-
     </div>
-
     <script>
-        new DataTable('#example');
+        new DataTable('#example', {
+            info: false,
+            lengthChange: false,
+            pageLength: 100
+        });
     </script>
-
-
 </x-admin.nav>
