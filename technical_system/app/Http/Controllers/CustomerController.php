@@ -15,7 +15,7 @@ class CustomerController extends Controller
     {
         return view('admin.customer.index', [
             'customers' => Customer::all(),
-        ])->with('message', 'wow');
+        ]);
     }
 
     /**
@@ -31,7 +31,17 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        return redirect(route('customer.index'))->with('message', 'wow');
+        $data = $request->validate([
+            'name' => 'required|unique:customers',
+            'address' => 'required|string',
+            'mobile' => 'required|numeric',
+            'land_phone' => 'numeric|nullable',
+            'company' => 'string|nullable',
+        ]);
+
+        $customer = Customer::create($data);
+
+        return to_route('customer.index')->with('message', 'wow');
     }
 
     /**

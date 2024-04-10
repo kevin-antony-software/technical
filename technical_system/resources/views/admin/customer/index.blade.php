@@ -1,9 +1,4 @@
 <x-admin.nav>
-    @isset($message)
-    <x-admin.alert>
-            {{ $message }}
-    </x-admin.alert>
-    @endisset
     <div class="container pt-2">
         <a class="btn btn-primary" href="{{ route('customer.create')}}" role="button">Create New Customer</a>
         <table id="example" class="display">
