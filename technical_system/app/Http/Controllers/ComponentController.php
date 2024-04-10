@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Component;
 use App\Http\Controllers\Controller;
+use App\Models\ComponentCategory;
 use Illuminate\Http\Request;
 
 class ComponentController extends Controller
@@ -13,7 +14,10 @@ class ComponentController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.component.index', [
+
+            'components' => Component::orderBy('id', 'DESC')->get(),
+        ]);
     }
 
     /**
@@ -21,7 +25,10 @@ class ComponentController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.component.create', [
+            'component_categories' => ComponentCategory::orderBy('id', 'DESC')->get(),
+
+        ]);
     }
 
     /**
@@ -29,7 +36,14 @@ class ComponentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|unique:components',
+            'cost' => 'required|numeric',
+            'price' => 'required|numeric',
+            'component_category_id' => 'required'
+        ]);
+        $Component = Component::create($data);
+        return to_route('component.index')->with('message', 'component created');
     }
 
     /**
@@ -61,6 +75,7 @@ class ComponentController extends Controller
      */
     public function destroy(Component $component)
     {
-        //
+        $component->delete();
+        return to_route('component.index')->with('message', 'component was deleted');
     }
 }

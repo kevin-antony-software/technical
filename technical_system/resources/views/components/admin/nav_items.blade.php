@@ -10,4 +10,17 @@
         <p class="text">Customer</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('component_category.index')}}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Component Category</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{{ route('component.index')}}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Component</p>
+    </a>
+</li>
 

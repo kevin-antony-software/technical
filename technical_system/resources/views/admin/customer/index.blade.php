@@ -11,7 +11,6 @@
                     <th>Mobile</th>
                     <th>Land Phone</th>
                     <th>Company</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -22,21 +21,15 @@
                         <td class="">
                             <div class="row">
                                 <div class="col-5">
-
                                         <a class="btn btn-primary btn-sm" href="{{ route('customer.edit', $customer) }}"
                                             role="button">Edit</a>
-                                    {{-- </div> --}}
                                 </div>
                                 <div class="col-5">
-{{--
-                                        <a href="javascript:void(0)" onclick="$(this).parent().find('form').submit()"
-                                            class="btn btn-danger btn-sm">DELETE</a> --}}
                                         <form action="{{ route('customer.destroy', $customer) }}" method="post" onclick="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
-                                    {{-- </div> --}}
                                 </div>
                             </div>
                         </td>
@@ -44,7 +37,6 @@
                         <td>{{ $customer->mobile }}</td>
                         <td>{{ $customer->land_phone }}</td>
                         <td>{{ $customer->company }}</td>
-
                     </tr>
                 @endforeach
             </tbody>

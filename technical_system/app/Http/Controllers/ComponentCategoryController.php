@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ComponentCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ComponentCategoryController extends Controller
 {
@@ -13,7 +14,9 @@ class ComponentCategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.component_category.index', [
+            'component_categories' => ComponentCategory::orderBy('id', 'DESC')->get(),
+        ]);
     }
 
     /**
@@ -21,7 +24,7 @@ class ComponentCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.component_category.create');
     }
 
     /**
@@ -29,7 +32,11 @@ class ComponentCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|unique:component_categories',
+        ]);
+        $ComponentCategory = ComponentCategory::create($data);
+        return to_route('component_category.index')->with('message', 'component category created');
     }
 
     /**
@@ -45,7 +52,9 @@ class ComponentCategoryController extends Controller
      */
     public function edit(ComponentCategory $componentCategory)
     {
-        //
+        return view('admin.component_category.edit', [
+            'component_category' => $componentCategory,
+        ]);
     }
 
     /**
@@ -53,7 +62,13 @@ class ComponentCategoryController extends Controller
      */
     public function update(Request $request, ComponentCategory $componentCategory)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', Rule::unique('component_categories')->ignore($componentCategory->id)],
+        ]);
+
+        $componentCategory->update($data);
+
+        return to_route('component_category.index')->with('message', 'component category was updated');
     }
 
     /**
@@ -61,6 +76,7 @@ class ComponentCategoryController extends Controller
      */
     public function destroy(ComponentCategory $componentCategory)
     {
-        //
+        $componentCategory->delete();
+        return to_route('component_category.index')->with('message', 'component category was deleted');
     }
 }

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ComponentCategory extends Model
 {
     use HasFactory;
+    public function components()
+    {
+        return $this->hasMany(Component::class);
+    }
+    protected $fillable = ['name'];
 }

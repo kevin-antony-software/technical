@@ -1,6 +1,6 @@
 <x-admin.nav>
     <div class="container pt-2">
-        <h3>Create Customer Form</h3>
+        <h3>Edit Customer Form</h3>
         <form method="POST" action="{{ route('customer.update', $customer) }}">
             @csrf
             @method('PUT')

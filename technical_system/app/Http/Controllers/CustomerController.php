@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -39,7 +40,7 @@ class CustomerController extends Controller
             'company' => 'string|nullable',
         ]);
         $customer = Customer::create($data);
-        return to_route('customer.index')->with('message', 'wow');
+        return to_route('customer.index')->with('message', 'new customer added to the system');
     }
 
     /**
@@ -66,7 +67,7 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
         $data = $request->validate([
-            'name' => 'required|unique:customers',
+            'name' => ['required', Rule::unique('customers')->ignore($customer->id)],
             'address' => 'required|string',
             'mobile' => 'required|numeric',
             'land_phone' => 'numeric|nullable',
