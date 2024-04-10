@@ -14,7 +14,7 @@ class CustomerController extends Controller
     public function index()
     {
         return view('admin.customer.index', [
-            'customers' => Customer::all(),
+            'customers' => Customer::orderBy('id', 'DESC')->get(),
         ]);
     }
 
@@ -38,9 +38,7 @@ class CustomerController extends Controller
             'land_phone' => 'numeric|nullable',
             'company' => 'string|nullable',
         ]);
-
         $customer = Customer::create($data);
-
         return to_route('customer.index')->with('message', 'wow');
     }
 
@@ -57,7 +55,9 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return view('admin.customer.edit', [
+            'customer' => $customer,
+        ]);
     }
 
     /**
@@ -65,7 +65,17 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|unique:customers',
+            'address' => 'required|string',
+            'mobile' => 'required|numeric',
+            'land_phone' => 'numeric|nullable',
+            'company' => 'string|nullable',
+        ]);
+
+        $customer->update($data);
+
+        return to_route('customer.index')->with('message', 'Customer was updated');
     }
 
     /**
@@ -73,6 +83,8 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return to_route('customer.index')->with('message', 'Customer was deleted');
+
     }
 }
