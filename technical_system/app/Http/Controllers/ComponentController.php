@@ -6,6 +6,7 @@ use App\Models\Component;
 use App\Http\Controllers\Controller;
 use App\Models\ComponentCategory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ComponentController extends Controller
 {
@@ -59,7 +60,11 @@ class ComponentController extends Controller
      */
     public function edit(Component $component)
     {
-        //
+        return view('admin.component.edit', [
+            'repair_component' => $component,
+            'component_categories' => ComponentCategory::orderBy('id', 'DESC')->get(),
+
+        ]);
     }
 
     /**
@@ -67,7 +72,15 @@ class ComponentController extends Controller
      */
     public function update(Request $request, Component $component)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', Rule::unique('components')->ignore($component->id)],
+            'cost' => 'required|numeric',
+            'price' => 'required|numeric',
+            'component_category_id' => 'required'
+        ]);
+
+        $component->update($data);
+        return to_route('component.index')->with('message', 'component updated');
     }
 
     /**
