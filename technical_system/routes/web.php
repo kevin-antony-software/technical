@@ -25,7 +25,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('component', ComponentController::class);
     Route::resource('component_category', ComponentCategoryController::class);
 
-
 });
 
 
