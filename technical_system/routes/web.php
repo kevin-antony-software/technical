@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
+use App\Http\Controllers\ComponentStockController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('component', ComponentController::class);
     Route::resource('component_category', ComponentCategoryController::class);
     Route::resource('machine_model', MachineModelController::class);
+    Route::resource('component_stock', ComponentStockController::class);
+
 
 });
 

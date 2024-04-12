@@ -12,5 +12,11 @@ class Component extends Model
     {
         return $this->belongsTo(ComponentCategory::class);
     }
+
+    public function component_stocks()
+    {
+        return $this->hasMany(ComponentStock::class);
+    }
+
     protected $fillable = ['name', 'cost', 'price', 'component_category_id'];
 }

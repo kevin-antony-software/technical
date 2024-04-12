@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Component;
 use App\Models\ComponentCategory;
+use App\Models\ComponentStock;
 use App\Models\Customer;
 use App\Models\MachineModel;
 use App\Models\Note;
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
         // Customer::factory(50)->create();
         // ComponentCategory::factory(50)->create();
         // Component::factory(50)->create();
-        MachineModel::factory(100)->create();
+        // MachineModel::factory(100)->create();
+        ComponentStock::factory(50)->create();
     }
 }

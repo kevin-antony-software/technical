@@ -13,7 +13,9 @@ class ComponentStockController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.component_stock.index', [
+            'component_stocks' => ComponentStock::all(),
+        ]);
     }
 
     /**
@@ -45,7 +47,9 @@ class ComponentStockController extends Controller
      */
     public function edit(ComponentStock $componentStock)
     {
-        //
+        return view('admin.component_stock.edit', [
+            'component_stock' => $componentStock,
+        ]);
     }
 
     /**
@@ -53,7 +57,13 @@ class ComponentStockController extends Controller
      */
     public function update(Request $request, ComponentStock $componentStock)
     {
-        //
+        $data = $request->validate([
+            'new_qty' => 'required|numeric',
+        ]);
+
+        $componentStock->qty = $request->new_qty;
+        $componentStock->save();
+        return to_route('component_stock.index')->with('message', 'component stock updated');
     }
 
     /**
@@ -61,6 +71,7 @@ class ComponentStockController extends Controller
      */
     public function destroy(ComponentStock $componentStock)
     {
-        //
+        $componentStock->delete();
+        return to_route('component_stock.index')->with('message', 'component stock was deleted');
     }
 }

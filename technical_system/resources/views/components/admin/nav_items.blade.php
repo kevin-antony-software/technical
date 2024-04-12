@@ -29,3 +29,9 @@
         <p class="text">Machine Model</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('component_stock.index')}}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Component Stock</p>
+    </a>
+</li>
