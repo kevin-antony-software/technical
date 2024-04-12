@@ -7,7 +7,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Category</th>
-                    <th>Action</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                     <th>Cost</th>
                     <th>Price</th>
                 </tr>
@@ -18,20 +19,17 @@
                         <td>{{ $component->id }}</td>
                         <td>{{ $component->name }}</td>
                         <td>{{ $component->component_category->name }}</td>
-                        <td class="">
-                            <div class="row">
-                                <div class="col-5">
-                                        <a class="btn btn-primary btn-sm" href="{{ route('component.edit', $component) }}"
-                                            role="button">Edit</a>
-                                </div>
-                                <div class="col-5">
-                                        <form action="{{ route('component.destroy', $component) }}" method="post" onclick="return confirm('Are you sure?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                </div>
-                            </div>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{{ route('component.edit', $component) }}"
+                                role="button">Edit</a>
+                        </td>
+                        <td>
+                            <form action="{{ route('component.destroy', $component) }}" method="post"
+                                onclick="return confirm('Are you sure?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
                         </td>
                         <td>{{ $component->cost }}</td>
                         <td>{{ $component->price }}</td>

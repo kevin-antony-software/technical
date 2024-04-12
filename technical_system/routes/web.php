@@ -3,6 +3,7 @@
 use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('customer', CustomerController::class);
     Route::resource('component', ComponentController::class);
     Route::resource('component_category', ComponentCategoryController::class);
+    Route::resource('machine_model', MachineModelController::class);
 
 });
 

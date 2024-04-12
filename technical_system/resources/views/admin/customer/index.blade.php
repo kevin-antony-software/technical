@@ -6,7 +6,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Action</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                     <th>Address</th>
                     <th>Mobile</th>
                     <th>Land Phone</th>
@@ -19,19 +20,18 @@
                         <td>{{ $customer->id }}</td>
                         <td>{{ $customer->name }}</td>
                         <td class="">
-                            <div class="row">
-                                <div class="col-5">
+
                                         <a class="btn btn-primary btn-sm" href="{{ route('customer.edit', $customer) }}"
                                             role="button">Edit</a>
-                                </div>
-                                <div class="col-5">
+                        </td>
+                        <td>
+
                                         <form action="{{ route('customer.destroy', $customer) }}" method="post" onclick="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
-                                </div>
-                            </div>
+
                         </td>
                         <td>{{ $customer->address }}</td>
                         <td>{{ $customer->mobile }}</td>
