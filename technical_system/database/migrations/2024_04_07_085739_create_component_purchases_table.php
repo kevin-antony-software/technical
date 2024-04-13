@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('component_purchases', function (Blueprint $table) {
             $table->id();
             $table->string('status');
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }

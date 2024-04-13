@@ -35,3 +35,9 @@
         <p class="text">Component Stock</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('component_purchase.index')}}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">component purchase</p>
+    </a>
+</li>

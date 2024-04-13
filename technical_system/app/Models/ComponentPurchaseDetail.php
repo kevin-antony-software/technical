@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ComponentPurchaseDetail extends Model
 {
     use HasFactory;
+    public function component()
+    {
+        return $this->belongsTo(Component::class);
+    }
 }

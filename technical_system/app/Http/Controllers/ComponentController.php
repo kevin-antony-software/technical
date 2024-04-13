@@ -28,7 +28,6 @@ class ComponentController extends Controller
     {
         return view('admin.component.create', [
             'component_categories' => ComponentCategory::orderBy('id', 'DESC')->get(),
-
         ]);
     }
 
