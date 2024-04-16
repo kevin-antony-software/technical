@@ -78,10 +78,6 @@ class ComponentController extends Controller
             'component_category_id' => 'required'
         ]);
 
-        // $affected = DB::table('component_stocks')
-        //       ->where('component_id', $component->id)
-        //       ->update(['votes' => 1]);
-
         $component->update($data);
         return to_route('component.index')->with('message', 'component updated');
     }

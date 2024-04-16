@@ -1,17 +1,21 @@
 <?php
 
+use App\Http\Controllers\CommonIssueController;
 use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\ComponentPurchaseController;
 use App\Http\Controllers\ComponentStockController;
+use App\Http\Controllers\CourierWeightPriceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
+use App\Models\CourierWeightPrice;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('note.index');
+    // return view('admin.customer.index');
+    return to_route('customer.index');
 })->middleware(['auth', 'verified']);
 
 Route::get('/dashboard', function () {
@@ -30,7 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('machine_model', MachineModelController::class);
     Route::resource('component_stock', ComponentStockController::class);
     Route::resource('component_purchase', ComponentPurchaseController::class);
-
+    Route::resource('courier_weight_charge', CourierWeightPriceController::class);
+    Route::resource('common_issue', CommonIssueController::class);
 
 });
 

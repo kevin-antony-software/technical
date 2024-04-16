@@ -1,10 +1,4 @@
 <li class="nav-item">
-    <a href="{{ route('note.index')}}" class="nav-link">
-        <i class="nav-icon far fa-circle"></i>
-        <p class="text">Note</p>
-    </a>
-</li>
-<li class="nav-item">
     <a href="{{ route('customer.index')}}" class="nav-link">
         <i class="nav-icon far fa-circle"></i>
         <p class="text">Customer</p>
@@ -41,3 +35,17 @@
         <p class="text">component purchase</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('courier_weight_charge.index')}}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Courier Weight</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('common_issue.index')}}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Common issue</p>
+    </a>
+</li>
+
+

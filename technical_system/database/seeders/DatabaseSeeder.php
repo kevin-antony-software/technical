@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\CommonIssue;
 use App\Models\Component;
 use App\Models\ComponentCategory;
 use App\Models\ComponentStock;
+use App\Models\CourierWeightPrice;
 use App\Models\Customer;
 use App\Models\MachineModel;
 use App\Models\Note;
@@ -25,6 +27,8 @@ class DatabaseSeeder extends Seeder
         // ComponentCategory::factory(50)->create();
         // Component::factory(50)->create();
         // MachineModel::factory(100)->create();
-        ComponentStock::factory(50)->create();
+        // ComponentStock::factory(50)->create();
+        // CourierWeightPrice::factory(5)->create();
+        CommonIssue::factory(50)->create();
     }
 }
