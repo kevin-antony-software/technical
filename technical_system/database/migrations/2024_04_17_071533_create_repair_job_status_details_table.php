@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repair_job_statuses', function (Blueprint $table) {
+        Schema::create('repair_job_status_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('repair_job_id');
+            $table->foreignId('repair_job_status_id');
             $table->foreignId('user_id');
-            $table->foreignId('job_status_id');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('repair_job_statuses');
+        Schema::dropIfExists('repair_job_status_details');
     }
 };

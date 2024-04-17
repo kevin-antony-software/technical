@@ -10,6 +10,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RepairJobController;
 use App\Models\CourierWeightPrice;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('component_purchase', ComponentPurchaseController::class);
     Route::resource('courier_weight_charge', CourierWeightPriceController::class);
     Route::resource('common_issue', CommonIssueController::class);
+    Route::resource('repair_job', RepairJobController::class);
+
 
 });
 

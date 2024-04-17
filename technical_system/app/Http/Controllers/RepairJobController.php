@@ -13,7 +13,10 @@ class RepairJobController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.repair_job.index', [
+
+            'repair_jobs' => RepairJob::orderBy('id', 'DESC')->get(),
+        ]);
     }
 
     /**

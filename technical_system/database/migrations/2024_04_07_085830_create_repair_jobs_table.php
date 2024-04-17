@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('repair_jobs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id');
+            $table->foreignId('current_status_id');
             $table->string('serial_number')->nullable();
             $table->foreignId('machine_model_id');
             $table->string('method_came_in');
