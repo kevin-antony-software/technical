@@ -21,11 +21,11 @@
                             <tr @if($repair_job->warranty_type == 'With-Warranty' && $repair_job->repair_job_status->status != 'Job-Delivered') class="table-danger" @endif >
                                 <td> {{ $repair_job->id }}</td>
                                 <td> <a href="{{ route('repair_job.show', $repair_job->id) }}" class="btn btn-primary">view</a></td>
-                                <td> {{ $repair_job->customer_name }} </td>
-                                <td> {{ $repair_job->model }}</td>
-                                <td> {{ $repair_job->serialNum }} </td>
-                                <td> {{ $repair_job->repair_repair_jobstatus }}</td>
-                                <td> {{ $repair_job->warranty }}</td>
+                                <td> {{ $repair_job->customer->name }} </td>
+                                <td> {{ $repair_job->machine_model->name }}</td>
+                                <td> {{ $repair_job->serial_number }} </td>
+                                <td> {{ $repair_job->repair_job_status->status }}</td>
+                                <td> {{ $repair_job->warranty_type }}</td>
                                 <td> {{ $repair_job->repairTimes }} </td>
                             </tr>
                         @endforeach

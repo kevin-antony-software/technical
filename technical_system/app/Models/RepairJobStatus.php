@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class RepairJobStatus extends Model
 {
     use HasFactory;
+    public function repair_jobs()
+    {
+        return $this->hasMany(RepairJob::class);
+    }
 }

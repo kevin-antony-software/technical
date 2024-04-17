@@ -30,8 +30,7 @@ return new class extends Migration
             $table->decimal('discount', 15, 2)->nullable();
             $table->decimal('final_total', 15, 2)->nullable();
             $table->decimal('due_amount', 15, 2)->nullable();
-
-
+            $table->integer('repairTimes')->nullable();
             $table->timestamps();
         });
     }
