@@ -65,13 +65,6 @@ class RepairJobController extends Controller
         $job->machine_model_id = MachineModel::where('name', $request->model)->value('id');;
         $job->method_came_in = $request->method_came_in;
         $job->warranty_type = $request->warranty_type;
-
-        // if ($request->warranty_type == "withWarranty") {
-        //     $job->warranty_type = "withWarranty";
-        // } else {
-        //     $job->warranty_type = "withoutWarranty";
-        // }
-
         $job->current_status_id = 1;
         $jobRepairTimes = DB::table('repair_jobs')->where('serial_number', $request->serial_number)->count();
         $job->repairTimes = $jobRepairTimes;
