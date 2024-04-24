@@ -26,7 +26,8 @@
             </div>
             <div class="mb-3">
                 <label for="land_phone" class="form-label">Land Phone Number</label>
-                <input type="number" class="form-control" id="land_phone" name="land_phone" value="{{ old('land_phone') }}">
+                <input type="number" class="form-control" id="land_phone" name="land_phone"
+                    value="{{ old('land_phone') }}">
                 @error('land_phone')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -38,6 +39,19 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="customer_type" class="form-label">Customer Type</label>
+                {{-- <input type="text" class="form-control" id="company" name="company" value="{{ old('company') }}"> --}}
+                <select name="customer_type" id="customer_type" class="form-control">
+                    <option value="end-customer" selected>End Customer</option>
+                    <option value="dealer">Dealer</option>
+                </select>
+                @error('customer_type')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+
             <div class="row">
                 <div class="col-6">
                     <a class="btn btn-block btn-secondary" href="{{ route('customer.index') }}" role="button">Go Back

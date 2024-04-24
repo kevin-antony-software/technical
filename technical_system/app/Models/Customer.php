@@ -12,5 +12,5 @@ class Customer extends Model
     {
         return $this->hasMany(RepairJob::class);
     }
-    protected $fillable = ['name', 'address', 'mobile', 'land_phone', 'company'];
+    protected $fillable = ['customer_type','name', 'address', 'mobile', 'land_phone', 'company'];
 }

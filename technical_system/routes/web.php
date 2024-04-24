@@ -37,11 +37,18 @@ Route::middleware('auth')->group(function () {
     Route::resource('component_purchase', ComponentPurchaseController::class);
     Route::resource('courier_weight_charge', CourierWeightPriceController::class);
     Route::resource('common_issue', CommonIssueController::class);
+    Route::get('repair_job/printDetail/{id}', [RepairJobController::class, 'printDetail'])->name('repair_job.printDetail');
+    Route::get('repair_job/print/{id}', [RepairJobController::class, 'print'])->name('repair_job.print');
+
+    Route::get('repair_job/start/{id}', [RepairJobController::class, 'start'])->name('repair_job.start');
+    Route::get('repair_job/close/{id}', [RepairJobController::class, 'close'])->name('repair_job.close');
+    Route::post('repair_job/closeSave/{job}', [RepairJobController::class, 'closeSave'])->name('repair_job.closeSave');
+    Route::get('repair_job/estimate/{id}', [RepairJobController::class, 'estimate'])->name('repair_job.estimate');
+    Route::post('repair_job/estimateSave/{job}', [RepairJobController::class, 'estimateSave'])->name('repair_job.estimateSave');
+    Route::get('repair_job/deliverPage/{id}', [RepairJobController::class, 'deliverPage'])->name('repair_job.deliverPage');
+    Route::post('repair_job/deliverSave/{job}', [RepairJobController::class, 'deliverSave'])->name('repair_job.deliverSave');
+
     Route::resource('repair_job', RepairJobController::class);
-
-
 });
-
-
 
 require __DIR__ . '/auth.php';

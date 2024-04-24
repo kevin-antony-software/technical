@@ -33,11 +33,13 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'customer_type' => 'string|required',
             'name' => 'required|unique:customers',
             'address' => 'required|string',
             'mobile' => 'required|numeric',
             'land_phone' => 'numeric|nullable',
             'company' => 'string|nullable',
+
         ]);
         $customer = Customer::create($data);
         return to_route('customer.index')->with('message', 'new customer added to the system');
@@ -67,6 +69,7 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
         $data = $request->validate([
+            'customer_type' => 'string|required',
             'name' => ['required', Rule::unique('customers')->ignore($customer->id)],
             'address' => 'required|string',
             'mobile' => 'required|numeric',

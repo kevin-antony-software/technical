@@ -20,4 +20,8 @@ class RepairJob extends Model
     {
         return $this->belongsTo(MachineModel::class);
     }
+    public function repair_job_detail()
+    {
+        return $this->hasMany(RepairJobDetail::class);
+    }
 }

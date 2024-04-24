@@ -21,5 +21,10 @@ class Component extends Model
     {
         return $this->hasMany(ComponentPurchaseDetail::class);
     }
+    public function repair_job_details()
+    {
+        return $this->hasMany(RepairJobDetail::class);
+    }
+
     protected $fillable = ['name', 'cost', 'price', 'component_category_id'];
 }

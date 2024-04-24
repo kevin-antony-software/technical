@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('repair_job_id');
             $table->foreignId('component_id');
+            $table->decimal('component_price', 15, 2);
             $table->bigInteger('qty');
             $table->decimal('sub_total', 15, 2);
             $table->timestamps();
