@@ -58,13 +58,13 @@
                         Job</a>
                 @endif
             </div>
-            {{--
+
             <div class="col-6">
                 <form action="{{ route('repair_job.uploadImagepage', $repair_job->id) }}" method="post">
                     @csrf
                     <button type="submit" class="btn btn-block btn-warning">Upload Image</button>
                 </form>
-            </div> --}}
+            </div>
         </div>
 
         {{-- @can('director-only') --}}
@@ -85,21 +85,21 @@
 
         <table class="table table-bordered" style="table-layout: fixed;">
             <tbody>
-                {{-- <tr>
+                <tr>
                     <td style="width:50%">
                         Warranty Status
                     </td>
                     <td style="width:50%">
                         <div class="px-5">
-                            @can('director-only')
+                            {{-- @can('director-only') --}}
                                 <form action="{{ route('repair_job.changeWarranty', $repair_job->id) }}" method="post">
                                     @csrf
                                     <div class="form-check form-switch">
                                         <input type="checkbox" class="form-check-input" id="exampleCheck1"
-                                            @if ($repair_job->warranty == 'withWarranty') @checked(true) @endif
+                                            @if ($repair_job->warranty_type == 'With-Warranty') @checked(true) @endif
                                             onChange="this.form.submit()">
                                         <label class="form-check-label" for="exampleCheck1">
-                                            @if ($repair_job->warranty == 'withWarranty')
+                                            @if ($repair_job->warranty_type == 'With-Warranty')
                                                 With Warranty
                                             @else
                                                 Without Warranty
@@ -107,10 +107,10 @@
                                         </label>
                                     </div>
                                 </form>
-                            @endcan
+                            {{-- @endcan --}}
                         </div>
                     </td>
-                </tr> --}}
+                </tr>
                 <tr>
                     <td> Customer Name</td>
                     <td> {{ $repair_job->customer->name }} </td>
@@ -182,6 +182,9 @@
         @foreach ($images as $image)
             <div class="col-12 pt-2">
                 <img src="{{ URL::asset($image) }}" style="width: 100%" />
+                <img src="{{ asset($image) }}" style="width: 100%" />
+                <p>{{ URL::asset($image) }}</p>
+                <p>{{ asset($image) }}</p>
             </div>
         @endforeach
 
@@ -191,6 +194,6 @@
             <img src="{{ asset($image) }}" style="width: 100%" />
         </div>
     @endforeach --}}
-    </div>
 
+    </div>
 </x-admin.nav>

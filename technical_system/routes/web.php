@@ -47,6 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::post('repair_job/estimateSave/{job}', [RepairJobController::class, 'estimateSave'])->name('repair_job.estimateSave');
     Route::get('repair_job/deliverPage/{id}', [RepairJobController::class, 'deliverPage'])->name('repair_job.deliverPage');
     Route::post('repair_job/deliverSave/{job}', [RepairJobController::class, 'deliverSave'])->name('repair_job.deliverSave');
+    Route::post('repair_job/changeWarranty/{job}', [RepairJobController::class, 'changeWarranty'])->name('repair_job.changeWarranty');
+    Route::post('repair_job/uploadImagepage/{job}', [RepairJobController::class, 'uploadImagepage'])->name('repair_job.uploadImagepage');
+    Route::post('repair_job/uploadImageSave/{job}', [RepairJobController::class, 'uploadImageSave'])->name('repair_job.uploadImageSave');
 
     Route::resource('repair_job', RepairJobController::class);
 });

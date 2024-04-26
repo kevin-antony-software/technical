@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+
+use Spatie\MediaLibrary\Conversions\Manipulations;
 
 class RepairJobController extends Controller
 {
@@ -193,13 +196,11 @@ class RepairJobController extends Controller
             if ($customer->customer_type == 'end-customer') {
                 $this->sendSMS($customer->customer_name, "Repair Job Closed for RETOP welding machine with job id " . $job->id . "cost of Rs " . $request->finalTotal . "/=");
             }
-
         } else {
             $job->due_amount = 0;
             if ($customer->customer_type == 'end-customer') {
                 $this->sendSMS($customer->customer_name, "Repair Job Closed for RETOP welding machine with job id " . $job->id);
             }
-
         }
 
         $job_status = new RepairJobStatusDetail();
@@ -245,11 +246,28 @@ class RepairJobController extends Controller
 
         $customer = Customer::where('id', $job->customer_id)->first();
         if ($customer->customer_type == 'end-customer') {
-            $this->sendSMS($customer->customer_name, "RETOP Welding machine with Repair Job " . $job->id . " Delivered with ". $job->promptOut);
+            $this->sendSMS($customer->customer_name, "RETOP Welding machine with Repair Job " . $job->id . " Delivered with " . $job->promptOut);
         }
         return redirect()->route('repair_job.index');
     }
 
+    public function changeWarranty($id)
+    {
+        $job = RepairJob::where('id', $id)->first();
+
+        if ($job->warranty_type == 'With-Warranty') {
+            $job->warranty_type = 'Without-Warranty';
+            $job->due_amount = $job->final_total;
+            $job->save();
+        } else if ($job->warranty_type == 'Without-Warranty') {
+            $job->warranty_type = 'With-Warranty';
+            $job->due_amount = 0;
+            $job->save();
+        }
+
+        // return redirect()->route('repair_job.index');
+        return redirect()->back();
+    }
 
     public function index()
     {
@@ -342,7 +360,66 @@ class RepairJobController extends Controller
             echo "Sent Failed - Error : " . $res[1];
         }
     }
+    public function uploadImagepage($id)
+    {
+        $arr['job'] = RepairJob::where('id', $id)->first();
+        return view('admin.repair_job.uploadImagesPage')->with($arr);
+    }
 
+    public function uploadImageSave($id, Request $request)
+    {
+        $job = RepairJob::where('id', $id)->first();
+        $folder = 'repair_images/job_' . $id . '/';
+
+        if ($request->hasFile('image1')) {
+            $file = $request->file('image1');
+            $extension = $file->getClientOriginalExtension();
+            $files =  File::files($folder);
+            $nextNum = count($files) + 1;
+            $namecreate= "image_".$id. "_" . $nextNum;
+            $finalname = $namecreate.".".$extension;
+            $dest_photo = $folder . $finalname;
+            $this->compress_image($file, $dest_photo, 25);
+        }
+
+        if ($request->hasFile('image2')) {
+            $file = $request->file('image2');
+            $extension = $file->getClientOriginalExtension();
+            $files =  File::files($folder);
+            $nextNum = count($files) + 1;
+            $namecreate= "image_".$id. "_" . $nextNum;
+            $finalname = $namecreate.".".$extension;
+            $dest_photo = $folder . $finalname;
+            $this->compress_image($file, $dest_photo, 25);
+        }
+
+        if ($request->hasFile('image3')) {
+            $file = $request->file('image3');
+            $extension = $file->getClientOriginalExtension();
+            $files =  File::files($folder);
+            $nextNum = count($files) + 1;
+            $namecreate= "image_".$id. "_" . $nextNum;
+            $finalname = $namecreate.".".$extension;
+            $dest_photo = $folder . $finalname;
+            $this->compress_image($file, $dest_photo, 25);
+        }
+
+
+        return redirect()->route('repair_job.index');
+    }
+
+    public function compress_image($source_url, $destination_url, $quality) {
+        $info = getimagesize($source_url);
+
+        if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
+        elseif ($info['mime'] == 'image/gif') $image = imagecreatefromgif($source_url);
+        elseif ($info['mime'] == 'image/png') $image = imagecreatefrompng($source_url);
+        elseif ($info['mime'] == 'image/jpg') $image = imagecreatefromjpeg($source_url);
+
+        imagejpeg($image, $destination_url, $quality);
+
+        return $destination_url;
+    }
     /**
      * Display the specified resource.
      */
