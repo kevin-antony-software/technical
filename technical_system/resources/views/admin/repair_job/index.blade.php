@@ -12,6 +12,7 @@
                     <th>Status </th>
                     <th>Warranty </th>
                     <th>Previous </th>
+                    <th>Total Amount Rs.</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,6 +29,7 @@
                             <td> {{ $repair_job->repair_job_status->status }}</td>
                             <td> {{ $repair_job->warranty_type }}</td>
                             <td> {{ $repair_job->repairTimes }} </td>
+                            <td> {{ $repair_job->final_total }}</td>
                         </tr>
                     @endforeach
                 @else

@@ -28,7 +28,7 @@ class RepairJobController extends Controller
     public function printDetail($id)
     {
         $job = RepairJob::where('id', $id)->first();
-        $arr['jobDetails'] = DB::table('repair_job_details')->where('repair_job_id', $id)->get();
+        $arr['jobDetails'] = RepairJobDetail::where('repair_job_id', $id)->get();
         $arr['job'] = $job;
         $arr['customer'] = Customer::where('id', $job->customer_id)->first();
         $pdf = PDF::loadView('admin.repair_job.printDetail', $arr);
@@ -104,7 +104,7 @@ class RepairJobController extends Controller
         $job->repair_charges = $request->repairCharges;
         $job->total_charges = $request->totalCharges;
         $job->discount = $request->discount;
-        $job->final_total = $request->finalTotal;
+        $job->final_total = $request->finalTotal - $job->special_discount;
         $job->estimated_cost = $request->finalTotal;
 
         if ($request->commonIssue == 'common') {
@@ -182,7 +182,7 @@ class RepairJobController extends Controller
         $job->repair_charges = $request->repairCharges;
         $job->total_charges = $request->totalCharges;
         $job->discount = $request->discount;
-        $job->final_total = $request->finalTotal;
+        $job->final_total = $request->finalTotal - $job->special_discount;
 
         if ($request->commonIssue == 'common') {
             $job->issue = $request->issueOld;
@@ -463,6 +463,10 @@ class RepairJobController extends Controller
         $repairJob->machine_model_id = MachineModel::where('name', $request->model)->value('id');;
         $repairJob->method_came_in = $request->method_came_in;
         $repairJob->warranty_type = $request->warranty_type;
+        $repairJob->special_discount = $request->special_discount;
+        if($repairJob->current_status_id > 2){
+            $repairJob->final_total = $repairJob->total - $repairJob->discount - $repairJob->special_discount;
+        }
         $repairJob->save();
         return to_route('repair_job.index')->with('message', 'Repair Job updated');
     }

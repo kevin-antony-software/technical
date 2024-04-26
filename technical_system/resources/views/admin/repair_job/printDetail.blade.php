@@ -116,7 +116,7 @@
                     <td style="text-align: left;">
                         <p style="padding-left: 50px;">Total Charges </p>
                     </td>
-                    <td style="text-align: center;">Rs. {{ $job->finalTotal }}/=</td>
+                    <td style="text-align: center;">Rs. {{ $job->final_total }}/=</td>
                 </tr>
             </tbody>
         </table>
@@ -134,10 +134,10 @@
                 <tbody style="text-align: center; border: 1px solid black;">
                     @foreach ($jobDetails as $item)
                         <tr>
-                            <td>{{ $item->component_name }}</td>
+                            <td>{{ $item->component->name }}</td>
                             <td>{{ $item->qty }}</td>
                             <td>{{ $item->component_price }}</td>
-                            <td>{{ $item->subTotal }}</td>
+                            <td>{{ $item->sub_total }}</td>
                         </tr>
                     @endforeach
                 </tbody>

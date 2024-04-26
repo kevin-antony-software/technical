@@ -85,6 +85,15 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            
+            <div class="form-group">
+                <label for="special_discount">special discount</label>
+                <input type="number" class="form-control" id="special_discount" name="special_discount"
+                    aria-describedby="special_discount" value="{{ $repair_job->special_discount }}">
+                @error('special_discount')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
             <div class="form-group">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="warranty_type" id="inlineRadio1"

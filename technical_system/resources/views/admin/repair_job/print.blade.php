@@ -116,7 +116,7 @@
                                 Serial Number : {{ $job->serial_number }} <br>
                                 Model : {{ $job->machine_model->name }} </p>
                         </td>
-                        <td style="text-align: center;">Rs. {{ $job->finalTotal }}/=</td>
+                        <td style="text-align: center;">Rs. {{ $job->final_total }}/=</td>
                     </tr>
                 </tbody>
             </table>
