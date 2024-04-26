@@ -112,6 +112,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <td> Job ID</td>
+                    <td> {{ $repair_job->id }} </td>
+                </tr>
+                <tr>
                     <td> Customer Name</td>
                     <td> {{ $repair_job->customer->name }} </td>
                 </tr>
@@ -187,13 +191,6 @@
                 <p>{{ asset($image) }}</p>
             </div>
         @endforeach
-
-        {{-- //this is for the server --}}
-        {{-- @foreach ($images as $image)
-        <div class="col-12 pt-2">
-            <img src="{{ asset($image) }}" style="width: 100%" />
-        </div>
-    @endforeach --}}
 
     </div>
 </x-admin.nav>

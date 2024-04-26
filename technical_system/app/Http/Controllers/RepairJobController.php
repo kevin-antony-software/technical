@@ -439,7 +439,10 @@ class RepairJobController extends Controller
      */
     public function edit(RepairJob $repairJob)
     {
-        //
+        $arr['models'] = MachineModel::orderBy('name', 'desc')->get();
+        $arr['customers'] = Customer::orderBy('name', 'desc')->get();
+        $arr['repair_job'] = $repairJob;
+        return view('admin.repair_job.edit')->with($arr);
     }
 
     /**
@@ -447,7 +450,21 @@ class RepairJobController extends Controller
      */
     public function update(Request $request, RepairJob $repairJob)
     {
-        //
+        $validatedData = $request->validate([
+            'customer_name' => 'required|exists:customers,name',
+            'serial_number' => 'required',
+            'model' => 'required|exists:machine_models,name',
+            'method_came_in' => 'required',
+            'warranty_type' => 'required',
+        ]);
+
+        $repairJob->customer_id = Customer::where('name', $request->customer_name)->value('id');
+        $repairJob->serial_number = $request->serial_number;
+        $repairJob->machine_model_id = MachineModel::where('name', $request->model)->value('id');;
+        $repairJob->method_came_in = $request->method_came_in;
+        $repairJob->warranty_type = $request->warranty_type;
+        $repairJob->save();
+        return to_route('repair_job.index')->with('message', 'Repair Job updated');
     }
 
     /**
@@ -455,6 +472,8 @@ class RepairJobController extends Controller
      */
     public function destroy(RepairJob $repairJob)
     {
-        //
+        $repairJob->delete();
+        return to_route('repair_job.index')->with('message', 'Repair Job deleted');
+
     }
 }
