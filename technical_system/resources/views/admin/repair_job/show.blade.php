@@ -186,9 +186,9 @@
         @foreach ($images as $image)
             <div class="col-12 pt-2">
                 <img src="{{ URL::asset($image) }}" style="width: 100%" />
-                <img src="{{ asset($image) }}" style="width: 100%" />
+                {{-- <img src="{{ asset($image) }}" style="width: 100%" /> --}}
                 <p>{{ URL::asset($image) }}</p>
-                <p>{{ asset($image) }}</p>
+                {{-- <p>{{ asset($image) }}</p> --}}
             </div>
         @endforeach
 

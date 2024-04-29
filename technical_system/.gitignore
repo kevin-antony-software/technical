@@ -4,6 +4,7 @@
 /public/media
 /public/hot
 /public/storage
+/public/repair_images
 /storage/*.key
 /vendor
 .env

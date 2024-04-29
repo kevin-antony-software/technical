@@ -23,7 +23,7 @@
                 @error('price')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
-            </div>`
+            </div>
             <div class="mb-3">
                 <label for="component_category_id" class="form-label">component category</label>
                 <select name="component_category_id" id="component_category_id" class="form-control">
