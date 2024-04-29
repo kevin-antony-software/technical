@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bank;
 use App\Http\Controllers\Controller;
+use App\Models\BankDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +50,16 @@ class BankController extends Controller
             'balance' => 'required|numeric',
 
         ]);
-        Bank::create($data);
+        $bank = Bank::create($data);
+        $bankDetail = new BankDetail();
+        $bankDetail->bank_id =$bank->id;
+        $bankDetail->amount = $request->balance;
+        $bankDetail->credit_amount = $request->balance;
+        $bankDetail->bank_balance = $request->balance;
+        $bankDetail->reason = "bank initiated with - " . $request->balance;
+        $bankDetail->save();
+
+
         return redirect()->route('bank.index')->with('message', 'New Bank saved!');
     }
 
@@ -58,7 +68,11 @@ class BankController extends Controller
      */
     public function show(Bank $bank)
     {
-        //
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $arr['bankDetails'] = BankDetail::where('bank_id', $bank->id)->orderBy('id', 'desc')->paginate(25);
+        return view('admin.bank.show')->with($arr);
     }
 
     /**
@@ -66,7 +80,11 @@ class BankController extends Controller
      */
     public function edit(Bank $bank)
     {
-        //
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $arr['bank'] = $bank;
+        return view('admin.bank.edit')->with($arr);
     }
 
     /**
@@ -74,7 +92,19 @@ class BankController extends Controller
      */
     public function update(Request $request, Bank $bank)
     {
-        //
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+
+        $validatedData = $request->validate([
+            'name' => ['required', Rule::unique('banks')->ignore($bank->id)],
+            'balance' => 'required|numeric',
+        ]);
+
+        $bank->name = $request->name;
+        $bank->balance = $request->balance;
+        $bank->save();
+        return redirect()->route('bank.index')->with('message', 'bank updated');
     }
 
     /**
@@ -82,6 +112,10 @@ class BankController extends Controller
      */
     public function destroy(Bank $bank)
     {
-        //
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $bank->delete();
+        return redirect()->route('bank.index');
     }
 }

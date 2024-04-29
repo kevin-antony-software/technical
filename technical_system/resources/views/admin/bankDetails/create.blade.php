@@ -1,20 +1,7 @@
-@extends('index2')
-@section('content')
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="container">
-        <form method="POST" action="{{ route('bankDetails.store') }}" onsubmit="return validateForm()">
+<x-admin.nav>
+    <div class="container pt-2">
+        <form method="POST" action="{{ route('bank_detail.store') }}" onsubmit="return validateForm()">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="FromBankname">From Bank</label>
@@ -53,7 +40,15 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" type="submit">Transfer</button>
+            <div class="row">
+                <div class="col-6">
+                    <a class="btn btn-block btn-secondary" href="{{ route('bank.index') }}" role="button">Go Back
+                        to Index</a>
+                </div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-block btn-primary">Transfer</button>
+                </div>
+            </div>
 
         </form>
     </div>
@@ -95,4 +90,4 @@
             document.getElementById("Available").value = bankBalance;
         }
     </script>
-@endsection
+</x-admin.nav>

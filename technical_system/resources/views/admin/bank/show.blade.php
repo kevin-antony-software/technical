@@ -1,24 +1,23 @@
-@extends('index2')
-@section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success">
-            {{ session()->get('message') }}
-        </div>
-    @endif
-
+<x-admin.nav>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
     <div class="container">
 
-        <a href="{{ route('bank.index') }}" class="btn btn-primary" style="margin-top: 5px;">Back to Index </a>
-    
+        <div class="container pt-2">
+            <div class="row">
+                <div class="col-12">
+                    <a href="{{ route('bank.index') }}" class="btn btn-block btn-primary"><strong> Back to Index </strong></a>
+                </div>
+
+            </div>
+        </div>
     </div>
     <section class="content">
-        <div class="container-fluid pt-2">
+        <div class="container pt-2">
 
 
             <div class="pt-2">
-                <table id="myTable" class="display" width="100%">
+                <table id="example" class="display" width="100%">
 
                     <thead class="thead-dark">
                         <tr>
@@ -39,13 +38,13 @@
                             @foreach ($bankDetails as $item)
                                 <tr>
                                     <td> {{ $item->id }}</td>
-                                    <td> {{ $item->bank_id }} </td>
+                                    <td> {{ $item->bank->name }} </td>
                                     <td> {{ $item->payment_id }} </td>
                                     <td> {{ $item->expense_id }} </td>
                                     <td> {{ $item->reason }} </td>
-                                    <td> {{ $item->credit }} </td>
-                                    <td> {{ $item->debit }} </td>
-                                    <td> {{ number_format($item->bankBalance,2) }} </td>
+                                    <td> {{ $item->credit_amount }} </td>
+                                    <td> {{ $item->debit_amount }} </td>
+                                    <td> {{ number_format($item->bank_balance,2) }} </td>
                                     <td> {{ $item->created_at }} </td>
 
 
@@ -62,20 +61,17 @@
         </div>
 
         <script>
-            $(document).ready(function() {
-                $('#myTable').DataTable({
-                    "paging": false,
-                    "order": [
-                        [0, "desc"]
-                    ],
-                    "lengthMenu": [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ]
-                });
+            new DataTable('#example', {
+                info: false,
+                lengthChange: false,
+                pageLength: 20,
+                order: [0, 'desc'],
+                layout: {
+                    topStart: {
+                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                    }
+                }
             });
         </script>
-
     </section>
-
-@endsection
+</x-admin.nav>

@@ -27,7 +27,11 @@ class BankDetailController extends Controller
      */
     public function create()
     {
-
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $arr['banks'] = Bank::all();
+        return view('admin.bankDetails.create')->with($arr);
     }
 
     /**
@@ -35,7 +39,40 @@ class BankDetailController extends Controller
      */
     public function store(Request $request)
     {
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $validated = $request->validate([
+            'FromBankname' => 'required',
+            'ToBankname' => 'required',
+            'Amount' => 'required|numeric',
+        ]);
 
+        $fromBankName = DB::table('banks')->where('id', $request->FromBankname)->value('name');
+        $toBankName = DB::table('banks')->where('id', $request->ToBankname)->value('name');
+        $available = DB::table('banks')->where('id', $request->FromBankname)->value('balance');
+
+        if ($available < $request->Amount){
+            return redirect()->route('bankDetails.create')->with('error', 'balance not enough')->withInput();
+        } else {
+            DB::table('banks')->where('id', $request->FromBankname)->decrement('balance', $request->Amount);
+            DB::table('banks')->where('id', $request->ToBankname)->increment('balance', $request->Amount);
+            $fromBank = new BankDetail();
+            $fromBank->bank_id = $request->FromBankname;
+            $fromBank->amount = $request->Amount;
+            $fromBank->debit_amount = $request->Amount;
+            $fromBank->bank_balance = $available - $request->Amount;
+            $fromBank->reason = "Fund Transfer - " . $toBankName;
+            $fromBank->save();
+            $toBank = new BankDetail();
+            $toBank->bank_id = $request->ToBankname;
+            $toBank->amount = $request->Amount;
+            $toBank->credit_amount = $request->Amount;
+            $toBank->bank_balance = DB::table('banks')->where('id', $request->ToBankname)->value('balance');
+            $toBank->reason = "Fund Transfered - " . $fromBankName;
+            $toBank->save();
+        }
+        return redirect()->route('bank.index')->with('message', 'Bank Transfer Done!');
     }
 
     /**
