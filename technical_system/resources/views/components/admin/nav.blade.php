@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>RETOP Technical</title>
+        <link rel="icon" type="image/x-icon" href="kandk_logo.jpg">
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet"

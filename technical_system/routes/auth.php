@@ -57,6 +57,10 @@ Route::middleware('can:admin-only')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
+});
+
+route::middleware('auth')->group(function() {
+
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });

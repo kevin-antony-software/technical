@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\BankDetailController;
 use App\Http\Controllers\CommonIssueController;
 use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
@@ -58,6 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::post('repair_job/uploadImagepage/{job}', [RepairJobController::class, 'uploadImagepage'])->name('repair_job.uploadImagepage');
     Route::post('repair_job/uploadImageSave/{job}', [RepairJobController::class, 'uploadImageSave'])->name('repair_job.uploadImageSave');
     Route::resource('repair_job', RepairJobController::class);
+
+    Route::resource('bank', BankController::class);
+    Route::resource('bank_detail', BankDetailController::class);
+
 });
 
 require __DIR__ . '/auth.php';

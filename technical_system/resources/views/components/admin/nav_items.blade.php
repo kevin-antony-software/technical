@@ -56,7 +56,7 @@
         <p class="text">Repair job</p>
     </a>
 </li>
-@can('admin-only')
+@can('director-only')
     <li class="nav-item">
         <a href="{{ route('user.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle"></i>
@@ -64,3 +64,12 @@
         </a>
     </li>
 @endcan
+@can('director-only')
+    <li class="nav-item">
+        <a href="{{ route('bank.index') }}" class="nav-link">
+            <i class="nav-icon far fa-circle"></i>
+            <p class="text">Bank</p>
+        </a>
+    </li>
+@endcan
+
