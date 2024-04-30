@@ -8,6 +8,7 @@ use App\Models\Bank;
 use App\Models\BankDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CashController extends Controller
 {
@@ -99,7 +100,11 @@ class CashController extends Controller
      */
     public function edit(Cash $cash)
     {
-        //
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $arr['cash'] = $cash;
+        return view('admin.cash.edit')->with($arr);
     }
 
     /**
@@ -107,7 +112,20 @@ class CashController extends Controller
      */
     public function update(Request $request, Cash $cash)
     {
-        //
+        if (Gate::denies('director-only')) {
+            return redirect()->route('dashboard');
+        }
+        $validatedData = $request->validate([
+            'newCash' => 'required|numeric',
+        ]);
+
+        $amount = $request->newCash - $cash->balance;
+        $cashNew = New Cash();
+        $cashNew->amount = $amount;
+        $cashNew->category = "Cash adjustment";
+        $cashNew->balance = $request->newCash;
+        $cashNew->save();
+        return redirect()->route('cash.index')->with('message', 'Cash Updated');
     }
 
     /**

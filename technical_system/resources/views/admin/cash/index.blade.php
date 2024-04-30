@@ -23,7 +23,6 @@
                         <th>Balance </th>
                         <th>Category </th>
                         <th>Date </th>
-                        <th>Action </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,9 +36,6 @@
                                 <td> {{ number_format($c->balance, 2) }} </td>
                                 <td> {{ $c->category }} </td>
                                 <td> {{ Carbon\Carbon::parse($c->created_at)->format('Y-m-d') }} </td>
-                                <td>
-                                    <a class="btn btn-primary"  href="{{ route('cash.edit', $c->id) }}" class="far fa-edit">Edit</a>
-                                </td>
                             </tr>
                         @endforeach
                     @else
@@ -62,5 +58,4 @@
             }
         });
     </script>
-
 </x-admin.nav>

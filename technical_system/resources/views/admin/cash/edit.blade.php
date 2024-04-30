@@ -1,14 +1,4 @@
-@extends('index2')
-@section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<x-admin.nav>
     <div class="container">
         <form method="POST" action="{{ route('cash.update', $cash->id) }}" onsubmit="return validateForm()">
             @csrf @method('PUT')
@@ -26,7 +16,15 @@
             @error('newCash')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
-            <button class="btn btn-block btn-primary" type="submit">Update Cash</button>
+            <div class="row">
+                <div class="col-6">
+                    <a class="btn btn-block btn-secondary" href="{{ route('cash.index') }}" role="button">Go Back
+                        to Index</a>
+                </div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-block btn-primary">Update Cash</button>
+                </div>
+            </div>
         </form>
     </div>
     <script>
@@ -37,4 +35,4 @@
             }
         }
     </script>
-@endsection
+</x-admin.nav>
