@@ -73,3 +73,10 @@
     </li>
 @endcan
 
+<li class="nav-item">
+    <a href="{{ route('cash.index') }}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Cash</p>
+    </a>
+</li>
+

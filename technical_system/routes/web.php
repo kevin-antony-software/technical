@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BankDetailController;
+use App\Http\Controllers\CashController;
 use App\Http\Controllers\CommonIssueController;
 use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
@@ -63,6 +64,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('bank', BankController::class);
     Route::resource('bank_detail', BankDetailController::class);
+    Route::resource('cash', CashController::class);
 
 });
 

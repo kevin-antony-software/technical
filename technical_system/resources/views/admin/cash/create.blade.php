@@ -1,22 +1,7 @@
-@extends('index2')
-@section('content')
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-
-
+<x-admin.nav>
     <div class="container">
         <form method="POST" id = "formID" action="{{ route('cash.store') }}" onsubmit="return validateForm()">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
+            @csrf
             <div class="pt-3 mb-3 row">
                 <label class="col-sm-2 col-form-label" for="BankAction">Action</label>
                 <div class="col-sm-10">
@@ -26,7 +11,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="Bank">Select Bank</label>
                 <div class="col-sm-10">
@@ -38,25 +22,18 @@
                     </select>
                 </div>
             </div>
-
-
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="Available"> Available</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="number" name="Available" id="Available" value="" disabled>
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="Amount">Amount</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="number" name="Amount" id="Amount">
                 </div>
             </div>
-
-
-
-
             <button class="btn btn-block btn-primary" type="submit">Deposite / Withdraw from Bank</button>
         </form>
     </div>
@@ -87,8 +64,8 @@
             var bankBalance;
             var bankID = document.getElementById("Bank").value;
             @foreach ($banks as $b)
-                if ({{ $b->id }} == bankID){
-                bankBalance = {{ $b->balance }};
+                if ({{ $b->id }} == bankID) {
+                    bankBalance = {{ $b->balance }};
                 }
             @endforeach
             if (document.getElementById("BankAction").value == 'deposite') {
@@ -102,8 +79,8 @@
             var bankBalance;
             var bankID = document.getElementById("Bank").value;
             @foreach ($banks as $b)
-                if ({{ $b->id }} == bankID){
-                bankBalance = {{ $b->balance }};
+                if ({{ $b->id }} == bankID) {
+                    bankBalance = {{ $b->balance }};
                 }
             @endforeach
             if (document.getElementById("BankAction").value != 'deposite') {
@@ -114,4 +91,4 @@
         }
     </script>
 
-@endsection
+</x-admin.nav>

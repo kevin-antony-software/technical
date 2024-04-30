@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('balance', 15, 2);
             $table->decimal('amount',15,2);
             $table->string('reason');
+            $table->string('category')->nullable();
             $table->timestamps();
         });
     }
