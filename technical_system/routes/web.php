@@ -3,6 +3,7 @@
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BankDetailController;
 use App\Http\Controllers\CashController;
+use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\CommonIssueController;
 use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\ComponentPurchaseController;
 use App\Http\Controllers\ComponentStockController;
 use App\Http\Controllers\CourierWeightPriceController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
@@ -66,6 +68,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('bank_detail', BankDetailController::class);
     Route::resource('cash', CashController::class);
 
+    Route::get('cheque/returnCheque/{cheque}', [ChequeController::class, 'returnCheque'])->name('cheque.returnCheque')->middleware('can:director-only');
+    Route::post('cheque/passCheque/{cheque}', [ChequeController::class, 'passCheque'])->name('cheque.passCheque')->middleware('can:director-only');
+    Route::resource('cheque', ChequeController::class);
+    
+    Route::resource('expense', ExpenseController::class);
 });
 
 require __DIR__ . '/auth.php';

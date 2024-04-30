@@ -1,20 +1,7 @@
-@extends('index2')
-@section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success">
-            {{ session()->get('message') }}
-        </div>
-    @endif
-    @if (session()->has('error'))
-    <div class="alert alert-danger">
-        {{ session()->get('error') }}
-    </div>
-@endif
-@include('components.datatableScriptHeader')
-    <section class="content">
-        <div class="container-fluid pt-2">
+<x-admin.nav>
+        <div class="container pt-2">
             <div class="pt-2">
-                <table id="myTable" class="display" width="100%">
+                <table id="example" class="display" width="100%">
                     <thead class="thead-dark">
                         <tr>
                             <th>Cheque ID</th>
@@ -26,7 +13,7 @@
                             <th>Amount </th>
                             <th>Cheque Date </th>
                             <th>Status </th>
-                            <th width=20%>Bank</th>
+                            <th>Pass/Ret</th>
                             <th>Action </th>
                         </tr>
                     </thead>
@@ -35,15 +22,13 @@
                             @foreach ($cheques as $cheque)
                                 <tr>
                                     <td> {{ $cheque->id }} </td>
-                                    <td> <a
-                                            href="{{ route('payment.show', $cheque->payment_id) }}">{{ $cheque->payment_id }}</a>
-                                    </td>
-                                    <td> {{ $cheque->customer_name }} </td>
-                                    <td> {{ $cheque->number }} </td>
-                                    <td> {{ $cheque->bank }} </td>
-                                    <td> {{ $cheque->branch }} </td>
+                                    <td> <a href="{{ route('payment.show', $cheque->payment_id) }}">{{ $cheque->payment_id }}</a></td>
+                                    <td> {{ $cheque->customer->name }} </td>
+                                    <td> {{ $cheque->cheque_number }} </td>
+                                    <td> {{ $cheque->cheque_bank }} </td>
+                                    <td> {{ $cheque->cheque_branch }} </td>
                                     <td> {{ number_format($cheque->amount,2) }} </td>
-                                    <td> {{ $cheque->chequeDate }} </td>
+                                    <td> {{ $cheque->cheque_date }} </td>
                                     <td> {{ $cheque->status }} </td>
                                     <td>
                                         <div class="row">
@@ -102,7 +87,17 @@
                 </table>
             </div>
         </div>
-        @include('components.datatableScript')
-    </section>
-
-@endsection
+        <script>
+            new DataTable('#example', {
+                info: false,
+                lengthChange: false,
+                pageLength: 20,
+                order: [0, 'desc'],
+                layout: {
+                    topStart: {
+                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                    }
+                }
+            });
+        </script>
+</x-admin.nav>

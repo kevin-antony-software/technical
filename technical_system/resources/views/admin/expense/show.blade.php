@@ -1,5 +1,5 @@
-@extends('index2')
-@section('content')
+<x-admin.nav>
+
     <style>
         div.fixed-btn {
             position: -webkit-sticky;
@@ -29,4 +29,4 @@
         </div>
 
     </div>
-@endsection
+</x-admin.nav>

@@ -5,6 +5,7 @@
 /public/hot
 /public/storage
 /public/repair_images
+/public/expenses_images
 /storage/*.key
 /vendor
 .env

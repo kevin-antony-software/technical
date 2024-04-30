@@ -10,7 +10,6 @@
         </div>
     </div>
 
-    <section class="content">
         <div class="container pt-2">
             <div class="pt-2">
                 <table id="example" class="display" width="100%">
@@ -66,6 +65,6 @@
                 }
             });
         </script>
-    </section>
+
 </x-admin.nav>
 
