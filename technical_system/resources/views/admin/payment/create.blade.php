@@ -1,16 +1,16 @@
 <x-admin.nav>
     <style>
         .ui-autocomplete {
-            max-height: 100px;
+            max-height: 200px;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
         * html .ui-autocomplete {
-            height: 100px;
+            height: 200px;
         }
-
     </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
@@ -18,7 +18,7 @@
             var cusJqery = {!! json_encode($customers->toArray()) !!};
             var cusName = [];
             for (var ckj = 0; ckj < cusJqery.length; ckj++) {
-                cusName.push(cusJqery[ckj].customer_name);
+                cusName.push(cusJqery[ckj].name);
             }
 
             $("#customer_name").autocomplete({
@@ -75,7 +75,6 @@
                                 td {
                                     min-width: 125px;
                                 }
-
                             </style>
                             <div class="pre-scrollable">
                                 <div class="table-responsive">
@@ -97,16 +96,19 @@
                                                             onchange="return myFunction1({{ $i }})">
                                                     </td>
                                                     <td><input type="number" name="bankNo{!! $i !!}"
-                                                            id="bankNo{!! $i !!}" class="form-control"></td>
+                                                            id="bankNo{!! $i !!}" class="form-control">
+                                                    </td>
                                                     <td><input type="number" name="branchNo{!! $i !!}"
                                                             id="branchNo{!! $i !!}" class="form-control">
                                                     </td>
                                                     <td><input step=".01" type="number"
                                                             name="chequeAmount{!! $i !!}"
-                                                            id="chequeAmount{!! $i !!}" class="form-control"
-                                                            onchange="return calculateTotal()"></td>
+                                                            id="chequeAmount{!! $i !!}"
+                                                            class="form-control" onchange="return calculateTotal()">
+                                                    </td>
                                                     <td><input type="date" name="chequeDate{!! $i !!}"
-                                                            id="chequeDate{!! $i !!}" class="form-control">
+                                                            id="chequeDate{!! $i !!}"
+                                                            class="form-control">
                                                     </td>
                                                 </tr>
                                             @endfor

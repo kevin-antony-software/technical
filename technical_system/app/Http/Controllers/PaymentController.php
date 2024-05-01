@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Bank;
 use App\Models\BankDetail;
 use App\Models\Cash;
+use App\Models\Cheque;
 use App\Models\Customer;
 use App\Models\RepairJob;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
@@ -71,7 +73,7 @@ class PaymentController extends Controller
     }
 
     public function link_job(Request $request, $id){
-        $paymentID = $request->paymentID;
+        $paymentID = $id;
         $payment = Payment::where('id', $paymentID)->first();
 
         for ($i = 1; $i <= 15; $i++) {
@@ -96,33 +98,21 @@ class PaymentController extends Controller
                     DB::table('repair_jobs')->where('id', $request->$jobID)->decrement('due_amount', $request->$paidAmount);
                     $job = RepairJob::where('id', $request->$jobID)->first();
 
-                    DB::table('invoice_payment')->insert([
+                    DB::table('payment_repair_job_links')->insert([
                         'payment_id' => $payment->id,
-                        'payment_date' => $payment->created_at,
-                        'payment_method' => $payment->method,
-                        'job_id' => $job->id,
-                        'job_closed_date' => $job->jobClosedTime,
-                        'customer_id' => $job->customer_id,
-                        'customer_name' => $job->customer_name,
-                        'commission_owner' => 0,
+                        'repair_job_id' => $job->id,
                         'amount' => $request->$paidAmount,
-                        'balance' => 0,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);
-                    DB::table('payments')->where('id', $payment->id)->decrement('balanceToAllocate', $request->$paidAmount);
-                    DB::table('payments')->where('id', $payment->id)->increment('allocatedToInvoice', $request->$paidAmount);
-                    if (DB::table('jobs')->where('id', $job->id)->value('dueAmount') < 1) {
-                        DB::table('jobs')
-                            ->where('id', $request->$jobID)
-                            ->update(['payment_status' => 'paid']);
-                    }
+                    DB::table('payments')->where('id', $payment->id)->decrement('balance_to_allocate', $request->$paidAmount);
+                    DB::table('payments')->where('id', $payment->id)->increment('allocated_to_job', $request->$paidAmount);
                 }
             }
         }
         if ($payment->method == 'Cheque') {
             $paymentLinks = array();
-            $cheques = Cheque::where('payment_id', $paymentID)->orderBy('chequeDate', 'asc')->get();
+            $cheques = Cheque::where('payment_id', $paymentID)->orderBy('cheque_date', 'asc')->get();
             for ($i = 1; $i <= 15; $i++) {
                 $jobID = "jobID" . $i;
                 $dueAmount = 'dueAmount' . $i;
@@ -151,92 +141,54 @@ class PaymentController extends Controller
                             DB::table('repair_jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $paymentLinks[$k]['balance']);
                             $job = RepairJob::where('id', $paymentLinks[$k]['jobID'])->first();
 
-                            DB::table('invoice_payment')->insert([
+                            DB::table('payment_repair_job_links')->insert([
                                 'payment_id' => $payment->id,
-                                'payment_date' => $payment->created_at,
-                                'payment_method' => $payment->method,
-                                'cheque_id' => $cheques[$j]->id,
-                                'job_id' => $job->id,
-                                'job_closed_date' => $job->jobClosedTime,
-                                'customer_id' => $job->customer_id,
-                                'customer_name' => $job->customer_name,
-                                'commission_owner' => 0,
+                                'repair_job_id' => $job->id,
                                 'amount' => $paymentLinks[$k]['balance'],
-                                'balance' => 0,
                                 'created_at' => Carbon::now(),
                                 'updated_at' => Carbon::now(),
                             ]);
-                            DB::table('payments')->where('id', $request->paymentID)->decrement('balanceToAllocate', $paymentLinks[$k]['balance']);
-                            DB::table('payments')->where('id', $request->paymentID)->increment('allocatedToInvoice', $paymentLinks[$k]['balance']);
-                            if (DB::table('jobs')->where('id', $job->id)->value('dueAmount') < 1) {
-                                DB::table('jobs')
-                                    ->where('id', $job->id)
-                                    ->update(['payment_status' => 'paid']);
-                            }
+                            DB::table('payments')->where('id', $request->paymentID)->decrement('balance_to_allocate', $paymentLinks[$k]['balance']);
+                            DB::table('payments')->where('id', $request->paymentID)->increment('allocated_to_job', $paymentLinks[$k]['balance']);
+
 
                             $cheques[$j]->balance = $cheques[$j]->balance - $paymentLinks[$k]['balance'];
                             $cheques[$j]->save();
                             $paymentLinks[$k]['balance'] = 0;
                         } else if ($cheques[$j]->balance < $paymentLinks[$k]['balance']) {
 
-                            DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->increment('PaidAmount', $cheques[$j]->balance);
-                            DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('dueAmount', $cheques[$j]->balance);
-                            $job = Job::where('id', $paymentLinks[$k]['jobID'])->first();
 
-                            DB::table('invoice_payment')->insert([
+                            DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $cheques[$j]->balance);
+                            $job = RepairJob::where('id', $paymentLinks[$k]['jobID'])->first();
+
+                            DB::table('payment_repair_job_links')->insert([
                                 'payment_id' => $payment->id,
-                                'payment_date' => $payment->created_at,
-                                'payment_method' => $payment->method,
-                                'cheque_id' => $cheques[$j]->id,
-                                'job_id' => $job->id,
-                                'job_closed_date' => $job->jobClosedTime,
-                                'customer_id' => $job->customer_id,
-                                'customer_name' => $job->customer_name,
-                                'commission_owner' => 0,
+                                'repair_job_id' => $job->id,
                                 'amount' => $cheques[$j]->balance,
-                                'balance' => 0,
                                 'created_at' => Carbon::now(),
                                 'updated_at' => Carbon::now(),
                             ]);
-                            DB::table('payments')->where('id', $request->paymentID)->decrement('balanceToAllocate', $cheques[$j]->balance);
-                            DB::table('payments')->where('id', $request->paymentID)->increment('allocatedToInvoice', $cheques[$j]->balance);
-                            if (DB::table('jobs')->where('id', $job->id)->value('dueAmount') < 1) {
-                                DB::table('jobs')
-                                    ->where('id', $job->id)
-                                    ->update(['payment_status' => 'paid']);
-                            }
+                            DB::table('payments')->where('id', $request->paymentID)->decrement('balance_to_allocate', $cheques[$j]->balance);
+                            DB::table('payments')->where('id', $request->paymentID)->increment('allocated_to_job', $cheques[$j]->balance);
 
                             $paymentLinks[$k]['balance'] = $paymentLinks[$k]['balance'] - $cheques[$j]->balance;
                             $cheques[$j]->balance = 0;
                             $cheques[$j]->save();
+
                         } else if ($cheques[$j]->balance == $paymentLinks[$k]['balance']) {
 
-                            DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->increment('PaidAmount', $cheques[$j]->balance);
-                            DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('dueAmount', $cheques[$j]->balance);
-                            $job = Job::where('id', $paymentLinks[$k]['jobID'])->first();
+                                                       DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $cheques[$j]->balance);
+                            $job = RepairJob::where('id', $paymentLinks[$k]['jobID'])->first();
 
-                            DB::table('invoice_payment')->insert([
+                            DB::table('payment_repair_job_links')->insert([
                                 'payment_id' => $payment->id,
-                                'payment_date' => $payment->created_at,
-                                'payment_method' => $payment->method,
-                                'cheque_id' => $cheques[$j]->id,
-                                'job_id' => $job->id,
-                                'job_closed_date' => $job->jobClosedTime,
-                                'customer_id' => $job->customer_id,
-                                'customer_name' => $job->customer_name,
-                                'commission_owner' => 0,
+                                'repair_job_id' => $job->id,
                                 'amount' => $cheques[$j]->balance,
-                                'balance' => 0,
                                 'created_at' => Carbon::now(),
                                 'updated_at' => Carbon::now(),
                             ]);
-                            DB::table('payments')->where('id', $request->paymentID)->decrement('balanceToAllocate', $cheques[$j]->balance);
-                            DB::table('payments')->where('id', $request->paymentID)->increment('allocatedToInvoice', $cheques[$j]->balance);
-                            if (DB::table('jobs')->where('id', $job->id)->value('dueAmount') < 1) {
-                                DB::table('jobs')
-                                    ->where('id', $job->id)
-                                    ->update(['payment_status' => 'paid']);
-                            }
+                            DB::table('payments')->where('id', $request->paymentID)->decrement('balance_to_allocate', $cheques[$j]->balance);
+                            DB::table('payments')->where('id', $request->paymentID)->increment('allocated_to_job', $cheques[$j]->balance);
 
                             $cheques[$j]->balance = 0;
                             $cheques[$j]->save();
@@ -271,7 +223,112 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'TotalAmount' => 'required|numeric',
+            'customer_name' => 'required',
+        ]);
+
+        if (DB::table('customers')->where('name', $request->customer_name)->doesntExist()) {
+            return redirect()->route('payment.create')->with('error', 'no customer with that name')->withInput();
+        }
+
+
+        $customerID = Customer::where('name', $request->customer_name)->value('id');
+        if ($request->Method == 'Cheque') {
+            for ($i = 1; $i < 20; $i++) {
+                $chequeNo = 'chequeNo' . $i;
+                $bankNo = 'bankNo' . $i;
+                $branchNo = 'branchNo' . $i;
+                $chequeAmount = 'chequeAmount' . $i;
+                $chequeDate = 'chequeDate' . $i;
+                if (
+                    $request->$chequeNo != '' ||
+                    $request->$bankNo != '' ||
+                    $request->$branchNo != '' ||
+                    $request->$chequeAmount != '' ||
+                    $request->$chequeDate != ''
+                ) {
+                    $validatedData = $request->validate([
+                        $chequeNo => 'required|numeric',
+                        $bankNo => 'required|numeric',
+                        $branchNo => 'required|numeric',
+                        $chequeAmount => 'required|numeric',
+                        $chequeDate => 'required',
+                    ]);
+                }
+            }
+        }
+        $idIN = DB::select("SHOW TABLE STATUS LIKE 'payments'");
+        $next_id = $idIN[0]->Auto_increment;
+
+        if ($request->Method == 'Cheque') {
+            for ($j = 1; $j < 20; $j++) {
+                $chequeNo = 'chequeNo' . $j;
+                $bankNo = 'bankNo' . $j;
+                $branchNo = 'branchNo' . $j;
+                $chequeAmount = 'chequeAmount' . $j;
+                $chequeDate = 'chequeDate' . $j;
+
+                if ($request->$chequeNo != '') {
+                    $cheque = new Cheque();
+                    $cheque->payment_id = $next_id;
+                    $cheque->cheque_number = $request->$chequeNo;
+                    $cheque->cheque_bank = $request->$bankNo;
+                    $cheque->cheque_branch = $request->$branchNo;
+                    $cheque->amount = $request->$chequeAmount;
+                    $cheque->cheque_date = $request->$chequeDate;
+                    $cheque->customer_id = $customerID;
+                    $cheque->status = 'pending';
+                    $cheque->balance = $request->$chequeAmount;
+                    $cheque->save();
+                }
+            }
+        }
+        $payment = new Payment();
+        $user = Auth::user();
+        $payment->user_id = $user->id;
+        $payment->status = 'with sales';
+        $payment->method = $request->Method;
+        $payment->amount = $request->TotalAmount;
+        $payment->allocated_to_job = 0;
+        $payment->balance_to_allocate = $request->TotalAmount;
+        $payment->customer_id = $customerID;
+        if ($request->Method == 'BankTransfer') {
+            $payment->bank_id = $request->bank;
+        }
+        $payment->save();
+
+        $textMessage = "Thank you! ";
+       // $customerMobileNum = (mysqli_fetch_assoc(mysqli_query($conn, "SELECT mobile FROM customers WHERE customerName = '$customer'")))['mobile'];
+       $BossMobileNum = Customer::where('name', $request->customer_name)->value('mobile');
+
+        $textMessage = "Thank you! " . $request->customer_name . " for the payment of Rs. " . $request->TotalAmount . ". Regards, K & K International Lanka Pvt Ltd";
+        $textBossMobile = "94" . $BossMobileNum;
+
+        if ($textBossMobile) {
+            // echo "<br></br><br></br>";
+            // echo $textBossMobile;
+
+            $user = "94777696922";
+            $password = "5177";
+            $text = urlencode($textMessage);
+            $to = $textBossMobile;
+
+            $baseurl = "http://www.textit.biz/sendmsg";
+            $url = "$baseurl/?id=$user&pw=$password&to=$to&text=$text";
+            $ret = file($url);
+
+            $res = explode(":", $ret[0]);
+
+            if (trim($res[0]) == "OK") {
+                echo "Message Sent - ID : " . $res[1];
+            } else {
+                echo "Sent Failed - Error : " . $res[1];
+            }
+        }
+
+
+        return redirect()->route('payment.index')->with('message', 'new payment saved');
     }
 
     /**

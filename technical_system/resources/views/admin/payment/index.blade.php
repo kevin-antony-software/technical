@@ -65,7 +65,7 @@
                                     @if ($payment->balance_to_allocate > 0)
 
                                         <a class="btn btn-success btn-sm"
-                                            href="{{ route('LinkJob.link', $payment->id) }}" role="button">Link
+                                            href="{{ route('payment.link', $payment->id) }}" role="button">Link
                                             Repair Job</a>
                                     @else
                                         nothing to link
