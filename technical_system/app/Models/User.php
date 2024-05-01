@@ -15,6 +15,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ComponentPurchase::class);
     }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     /**
      * The attributes that are mass assignable.

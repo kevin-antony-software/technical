@@ -14,6 +14,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepairJobController;
 use App\Http\Controllers\UserController;
@@ -71,8 +72,15 @@ Route::middleware('auth')->group(function () {
     Route::get('cheque/returnCheque/{cheque}', [ChequeController::class, 'returnCheque'])->name('cheque.returnCheque')->middleware('can:director-only');
     Route::post('cheque/passCheque/{cheque}', [ChequeController::class, 'passCheque'])->name('cheque.passCheque')->middleware('can:director-only');
     Route::resource('cheque', ChequeController::class);
-    
+
     Route::resource('expense', ExpenseController::class);
+    
+    Route::get('payment/print/{id}', [PaymentController::class, 'print'])->name('payment.print');
+    Route::post('payment/payment_receive/{id}', [PaymentController::class, 'payment_receive'])->name('payment.payment_receive');
+    Route::get('payment/link/{id}', [PaymentController::class, 'link'])->name('payment.link');
+    Route::post('payment/link_job/{id}', [PaymentController::class, 'link_job'])->name('payment.link_job');
+    Route::resource('payment', PaymentController::class);
+
 });
 
 require __DIR__ . '/auth.php';

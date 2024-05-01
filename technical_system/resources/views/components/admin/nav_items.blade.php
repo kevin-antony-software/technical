@@ -93,3 +93,10 @@
         <p class="text">Expense</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('payment.index') }}" class="nav-link">
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Payment</p>
+    </a>
+</li>

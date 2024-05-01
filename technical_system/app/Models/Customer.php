@@ -12,5 +12,9 @@ class Customer extends Model
     {
         return $this->hasMany(RepairJob::class);
     }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
     protected $fillable = ['customer_type','name', 'address', 'mobile', 'land_phone', 'company'];
 }

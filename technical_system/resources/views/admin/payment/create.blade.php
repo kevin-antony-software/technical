@@ -1,20 +1,4 @@
-@extends('index2')
-@section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @if (session()->has('error'))
-        <div class="alert alert-danger">
-            {{ session()->get('error') }}
-        </div>
-    @endif
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<x-admin.nav>
     <style>
         .ui-autocomplete {
             max-height: 100px;
@@ -242,4 +226,4 @@
 
         }
     </script>
-@endsection
+</x-admin.nav>
