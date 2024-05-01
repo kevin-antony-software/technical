@@ -74,9 +74,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('cheque', ChequeController::class);
 
     Route::resource('expense', ExpenseController::class);
-    
+
     Route::get('payment/print/{id}', [PaymentController::class, 'print'])->name('payment.print');
-    Route::post('payment/payment_receive/{id}', [PaymentController::class, 'payment_receive'])->name('payment.payment_receive');
+    Route::put('payment/payment_receive/{id}', [PaymentController::class, 'payment_receive'])->name('payment.payment_receive');
     Route::get('payment/link/{id}', [PaymentController::class, 'link'])->name('payment.link');
     Route::post('payment/link_job/{id}', [PaymentController::class, 'link_job'])->name('payment.link_job');
     Route::resource('payment', PaymentController::class);

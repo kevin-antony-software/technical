@@ -15,12 +15,22 @@ use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function print($id)
+    {
+        $payment = Payment::where('id', $id)->first();
+        $arr['payment'] = $payment;
+        $arr['customer'] = Customer::where('id', $payment->customer_id)->first();
+        $pdf = PDF::loadView('admin.payment.print', $arr);
+        return $pdf->download('payment.pdf');
+    }
+
     public function payment_receive($payment_id)
     {
 
@@ -32,7 +42,6 @@ class PaymentController extends Controller
 
         if ($payment->method == 'Cash') {
             $cashBalance = DB::table('cashes')->orderBy('id', 'desc')->first('balance');
-
             $newBalance = $cashBalance->balance + $payment->amount;
             $cash = new Cash();
             $cash->balance = $newBalance;
@@ -336,7 +345,11 @@ class PaymentController extends Controller
      */
     public function show(Payment $payment)
     {
-        //
+        $arr['payment'] = $payment;
+        $arr['payment_links'] = DB::table('payment_repair_job_links')->where('payment_id', $payment->id)->get();
+        $arr['cheques'] = DB::table('cheques')->where('payment_id', $payment->id)->get();
+
+        return view('admin.payment.show')->with($arr);
     }
 
     /**

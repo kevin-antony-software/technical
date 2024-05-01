@@ -1,14 +1,4 @@
-@extends('index2')
-@section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<x-admin.nav>
     <div class="container">
         <a href="{{ route('payment.index') }}" class="btn btn-primary float-right" style="margin-top: 5px;">Back to Index
         </a>
@@ -25,11 +15,11 @@
             <tbody>
                 <tr>
                     <th>Customer Name</th>
-                    <td>{{ $payment->customer_name }}</td>
+                    <td>{{ $payment->customer->name }}</td>
                 </tr>
                 <tr>
                     <th>User Name</th>
-                    <td>{{ $payment->user_name }}</td>
+                    <td>{{ $payment->user->name }}</td>
                 </tr>
                 <tr>
                     <th>Status</th>
@@ -41,20 +31,20 @@
                 </tr>
                 <tr>
                     <th>Total Amount</th>
-                    <td>{{ $payment->totalAmount }}</td>
+                    <td>{{ $payment->amount }}</td>
                 </tr>
                 <tr>
                     <th>Allocated to Invoice</th>
-                    <td>{{ $payment->allocatedToInvoice }}</td>
+                    <td>{{ $payment->allocated_to_job }}</td>
                 </tr>
                 <tr>
                     <th>Balance to Allocate</th>
-                    <td>{{ $payment->balanceToAllocate }}</td>
+                    <td>{{ $payment->balance_to_allocate }}</td>
                 </tr>
                 @if ($payment->method == 'BankTransfer')
                     <tr>
                         <th>Bank Transfer</th>
-                        <td>{{ $payment->bank_name }}</td>
+                        <td>{{ $payment->bank->name }}</td>
                     </tr>
                 @endif
             </tbody>
@@ -65,10 +55,7 @@
                 <thead>
                     <tr>
                         <th>Payment ID</th>
-                        <th>Invoice ID</th>
-                        <th>Invoice Date</th>
                         <th>Job ID</th>
-                        <th>Job Date</th>
                         <th>Amount</th>
                         <th>Date</th>
                     </tr>
@@ -77,10 +64,7 @@
                     @foreach ($payment_links as $link)
                         <tr>
                             <th>{{ $link->payment_id }}</th>
-                            <th>{{ $link->invoice_id }}</th>
-                            <td>{{ $link->invoice_date }}</td>
-                            <td>{{ $link->job_id }}</td>
-                            <td>{{ $link->job_closed_date }}</td>
+                            <th>{{ $link->repair_job_id }}</th>
                             <td>{{ $link->amount }}</td>
                             <td>{{ Carbon\Carbon::parse($link->created_at)->format('Y-m-d') }}</td>
                         </tr>
@@ -110,12 +94,12 @@
                     @foreach ($cheques as $c)
                         <tr>
                             <th>{{ $c->id }}</th>
-                            <th>{{ $c->bank }}</th>
-                            <td>{{ $c->branch }}</td>
-                            <td>{{ $c->number }}</td>
+                            <th>{{ $c->cheque_bank }}</th>
+                            <td>{{ $c->cheque_branch }}</td>
+                            <td>{{ $c->cheque_number }}</td>
                             <td>{{ $c->amount }}</td>
                             <td>{{ $c->status }}</td>
-                            <td>{{ Carbon\Carbon::parse($c->chequeDate)->format('Y-m-d') }}</td>
+                            <td>{{ Carbon\Carbon::parse($c->cheque_date)->format('Y-m-d') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -124,4 +108,4 @@
 
 
     </div>
-@endsection
+</x-admin.nav>

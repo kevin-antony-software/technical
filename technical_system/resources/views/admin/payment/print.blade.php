@@ -56,7 +56,9 @@
     </head>
 
     <body>
-        @include('components.logokk')
+
+        @include('components.admin.logokk')
+
 
 
         <div class="relative">
@@ -67,11 +69,11 @@
                 </tr>
                 <tr>
                     <th style="text-align: left;">Customer</th>
-                    <td> : {{ $payment->customer_name }}</td>
+                    <td> : {{ $payment->customer->name }}</td>
                 </tr>
                 <tr>
                     <th style="text-align: left;">City</th>
-                    <td>: {{ $city }}</td>
+                    <td>: {{ $payment->customer->address }}</td>
                 </tr>
 
 
@@ -88,7 +90,7 @@
                 </tr>
                 <tr>
                     <th style="text-align: left;">User</th>
-                    <td>: {{ $payment->user_name }}</td>
+                    <td>: {{ $payment->user->name }}</td>
                 </tr>
 
 
@@ -97,9 +99,9 @@
 
         <h2 style="text-align: center; text-decoration: underline"> Payment Receipt </h2>
 
-        This is to confirm recipt payment of Rs <Strong>{{ $payment->totalAmount }} </Strong> to K & K International
+        This is to confirm recipt payment of Rs <Strong>{{ $payment->amount }} </Strong> to K & K International
         Lanka Pvt Ltd
-        from Customer <Strong> {{ $payment->customer_name }} </Strong>with method {{ $payment->method }}.
+        from Customer <Strong> {{ $payment->customer->name }} </Strong>with method {{ $payment->method }}.
 
 
 

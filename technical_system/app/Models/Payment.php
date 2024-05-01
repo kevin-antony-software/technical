@@ -22,4 +22,8 @@ class Payment extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
 }
