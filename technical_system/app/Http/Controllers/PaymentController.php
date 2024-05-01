@@ -357,7 +357,12 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment)
     {
-        //
+        $arr['customers'] = Customer::select('id', 'name')->orderBy('name', 'asc')->get();
+        $arr['banks'] = Bank::select('id', 'name')->get();
+        $arr['payment'] = $payment;
+        $arr['cheques'] = DB::table('cheques')->where('payment_id', $payment->id)->get();
+
+        return view('admin.payment.edit')->with($arr);
     }
 
     /**
@@ -365,7 +370,71 @@ class PaymentController extends Controller
      */
     public function update(Request $request, Payment $payment)
     {
-        //
+        $validatedData = $request->validate([
+            'TotalAmount' => 'required|numeric',
+            'customer_name' => 'required',
+        ]);
+        $customerID = Customer::where('name', $request->customer_name)->value('id');
+        if ($payment->method == 'Cheque') {
+            $numofCheques = Cheque::where('payment_id', $payment->id)->count('id');
+            for ($i = 1; $i < $numofCheques; $i++) {
+                $chequeNo = 'chequeNo' . $i;
+                $bankNo = 'bankNo' . $i;
+                $branchNo = 'branchNo' . $i;
+                $chequeAmount = 'chequeAmount' . $i;
+                $chequeDate = 'chequeDate' . $i;
+                if (
+                    $request->$chequeNo != '' ||
+                    $request->$bankNo != '' ||
+                    $request->$branchNo != '' ||
+                    $request->$chequeAmount != '' ||
+                    $request->$chequeDate != ''
+                ) {
+                    $validatedData = $request->validate([
+                        $chequeNo => 'required|numeric',
+                        $bankNo => 'required|numeric',
+                        $branchNo => 'required|numeric',
+                        $chequeAmount => 'required|numeric',
+                        $chequeDate => 'required',
+                    ]);
+                }
+            }
+        }
+
+        if ($request->Method == 'Cheque') {
+            $deleted = DB::table('cheques')->where('payment_id', $payment->id)->delete();
+            for ($j = 1; $j <= $numofCheques; $j++) {
+                $chequeNo = 'chequeNo' . $j;
+                $bankNo = 'bankNo' . $j;
+                $branchNo = 'branchNo' . $j;
+                $chequeAmount = 'chequeAmount' . $j;
+                $chequeDate = 'chequeDate' . $j;
+
+                if ($request->$chequeNo != '') {
+                    $cheque = new Cheque();
+                    $cheque->payment_id = $payment->id;
+                    $cheque->cheque_number = $request->$chequeNo;
+                    $cheque->cheque_bank = $request->$bankNo;
+                    $cheque->cheque_branch = $request->$branchNo;
+                    $cheque->amount = $request->$chequeAmount;
+                    $cheque->cheque_date = $request->$chequeDate;
+                    $cheque->customer_id = $customerID;
+                    $cheque->status = 'pending';
+                    $cheque->balance = $request->$chequeAmount;
+                    $cheque->save();
+                }
+            }
+        }
+
+        $payment->amount = $request->TotalAmount;
+        $payment->allocated_to_job = 0;
+        $payment->balance_to_allocate = $request->TotalAmount;
+        $payment->customer_id = $customerID;
+        if ($request->Method == 'BankTransfer') {
+            $payment->bank_id = $request->bank;
+        }
+        $payment->save();
+        return redirect()->route('payment.index')->with('message', 'Payment Updated');
     }
 
     /**
@@ -373,6 +442,14 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
-        //
+        if ($payment->status == 'with sales') {
+            if ($payment->method == 'Cheque') {
+                $deleted = DB::table('cheques')->where('payment_id', $payment->id)->delete();
+            }
+
+            $payment->delete();
+        }
+
+        return redirect()->route('payment.index');
     }
 }

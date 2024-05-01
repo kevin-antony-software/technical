@@ -1,18 +1,8 @@
-@extends('index2')
-@section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<x-admin.nav>
+
     <style>
         .ui-autocomplete {
-            max-height: 100px;
+            max-height: 200px;
             overflow-y: auto;
             overflow-x: hidden;
         }
@@ -22,6 +12,7 @@
         }
 
     </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
@@ -29,7 +20,7 @@
             var cusJqery = {!! json_encode($customers->toArray()) !!};
             var cusName = [];
             for (var ckj = 0; ckj < cusJqery.length; ckj++) {
-                cusName.push(cusJqery[ckj].customer_name);
+                cusName.push(cusJqery[ckj].name);
             }
 
             $("#customer_name").autocomplete({
@@ -52,7 +43,7 @@
                 <label class="col-sm-2 col-form-label" for="TotalAmount">Total Amount</label>
                 <div class="col-sm-10">
                     <input class="form-control" step=".01" type="number" name="TotalAmount" id="TotalAmount"
-                        value="{{ $payment->totalAmount }}">
+                        value="{{ $payment->amount }}">
                 </div>
             </div>
 
@@ -60,7 +51,7 @@
                 <label for="customer_name" class="col-sm-2 col-form-label">Customer </label>
                 <div class="col-sm-10">
                     <input id="customer_name" name="customer_name" class="form-control"
-                        value="{{ $payment->customer_name }}" required>
+                        value="{{ $payment->customer->name }}" required>
                 </div>
             </div>
 
@@ -98,14 +89,14 @@
                                                 <tr>
                                                     <td><input type="number" name="chequeNo{!! $i !!}"
                                                             id="chequeNo{!! $i !!}" class="form-control"
-                                                            value="{{ $c->number }}" required>
+                                                            value="{{ $c->cheque_number }}" required>
                                                     </td>
                                                     <td><input type="number" name="bankNo{!! $i !!}"
                                                             id="bankNo{!! $i !!}" class="form-control"
-                                                            value="{{ $c->bank }}" required></td>
+                                                            value="{{ $c->cheque_bank }}" required></td>
                                                     <td><input type="number" name="branchNo{!! $i !!}"
                                                             id="branchNo{!! $i !!}" class="form-control"
-                                                            value="{{ $c->branch }}" required>
+                                                            value="{{ $c->cheque_branch }}" required>
                                                     </td>
                                                     <td><input step=".01" type="number"
                                                             name="chequeAmount{!! $i !!}"
@@ -114,7 +105,7 @@
                                                             required></td>
                                                     <td><input type="date" name="chequeDate{!! $i !!}"
                                                             id="chequeDate{!! $i !!}" class="form-control"
-                                                            value="{{ $c->chequeDate }}" required>
+                                                            value="{{ $c->cheque_date }}" required>
                                                     </td>
                                                 </tr>
                                                 {{ $i = $i + 1 }}
@@ -215,7 +206,8 @@
             } else {
                 return true;
             }
-        
+
 
     </script>
-@endsection
+
+</x-admin.nav>
