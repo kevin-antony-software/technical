@@ -45,11 +45,10 @@ class PaymentController extends Controller
             $newBalance = $cashBalance->balance + $payment->amount;
             $cash = new Cash();
             $cash->balance = $newBalance;
-            $cash->category = "payment ID - ". $payment->id;
+            $cash->category = "payment ID - " . $payment->id;
             $cash->amount = $payment->amount;
             $cash->payment_id = $payment->id;
             $cash->save();
-
         } else if ($payment->method == 'BankTransfer') {
             $bankBalance = DB::table('banks')->where('id', $payment->bank_id)->value('balance');
 
@@ -59,15 +58,14 @@ class PaymentController extends Controller
                 ->where('id', $payment->bank_id)
                 ->update(['balance' => $newBalance]);
 
-                $bankDetail = new BankDetail();
-                $bankDetail->bank_id = $payment->bank_id;
-                $bankDetail->payment_id = $payment->id;
-                $bankDetail->amount = $payment->amount;
-                $bankDetail->credit_amount = $payment->amount;
-                $bankDetail->bank_balance = $newBalance;
-                $bankDetail->reason = "payment ID - ". $payment->id . " - cus - ". $payment->customer_name;
-                $bankDetail->save();
-
+            $bankDetail = new BankDetail();
+            $bankDetail->bank_id = $payment->bank_id;
+            $bankDetail->payment_id = $payment->id;
+            $bankDetail->amount = $payment->amount;
+            $bankDetail->credit_amount = $payment->amount;
+            $bankDetail->bank_balance = $newBalance;
+            $bankDetail->reason = "payment ID - " . $payment->id . " - cus - " . $payment->customer_name;
+            $bankDetail->save();
         }
 
         return redirect()->route('payment.index')->with('message', 'payment - ' . $payment_id . ' received');
@@ -81,7 +79,8 @@ class PaymentController extends Controller
         return view('admin.jobLink.create')->with($arr);
     }
 
-    public function link_job(Request $request, $id){
+    public function link_job(Request $request, $id)
+    {
         $paymentID = $id;
         $payment = Payment::where('id', $paymentID)->first();
 
@@ -146,7 +145,6 @@ class PaymentController extends Controller
                     if ($paymentLinks[$k]['balance'] != 0) {
                         if ($cheques[$j]->balance > $paymentLinks[$k]['balance']) {
 
-
                             DB::table('repair_jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $paymentLinks[$k]['balance']);
                             $job = RepairJob::where('id', $paymentLinks[$k]['jobID'])->first();
 
@@ -160,14 +158,12 @@ class PaymentController extends Controller
                             DB::table('payments')->where('id', $request->paymentID)->decrement('balance_to_allocate', $paymentLinks[$k]['balance']);
                             DB::table('payments')->where('id', $request->paymentID)->increment('allocated_to_job', $paymentLinks[$k]['balance']);
 
-
                             $cheques[$j]->balance = $cheques[$j]->balance - $paymentLinks[$k]['balance'];
                             $cheques[$j]->save();
                             $paymentLinks[$k]['balance'] = 0;
                         } else if ($cheques[$j]->balance < $paymentLinks[$k]['balance']) {
 
-
-                            DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $cheques[$j]->balance);
+                            DB::table('repair_jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $cheques[$j]->balance);
                             $job = RepairJob::where('id', $paymentLinks[$k]['jobID'])->first();
 
                             DB::table('payment_repair_job_links')->insert([
@@ -183,10 +179,9 @@ class PaymentController extends Controller
                             $paymentLinks[$k]['balance'] = $paymentLinks[$k]['balance'] - $cheques[$j]->balance;
                             $cheques[$j]->balance = 0;
                             $cheques[$j]->save();
-
                         } else if ($cheques[$j]->balance == $paymentLinks[$k]['balance']) {
 
-                                                       DB::table('jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $cheques[$j]->balance);
+                            DB::table('repair_jobs')->where('id', $paymentLinks[$k]['jobID'])->decrement('due_amount', $cheques[$j]->balance);
                             $job = RepairJob::where('id', $paymentLinks[$k]['jobID'])->first();
 
                             DB::table('payment_repair_job_links')->insert([
@@ -308,8 +303,8 @@ class PaymentController extends Controller
         $payment->save();
 
         $textMessage = "Thank you! ";
-       // $customerMobileNum = (mysqli_fetch_assoc(mysqli_query($conn, "SELECT mobile FROM customers WHERE customerName = '$customer'")))['mobile'];
-       $BossMobileNum = Customer::where('name', $request->customer_name)->value('mobile');
+        // $customerMobileNum = (mysqli_fetch_assoc(mysqli_query($conn, "SELECT mobile FROM customers WHERE customerName = '$customer'")))['mobile'];
+        $BossMobileNum = Customer::where('name', $request->customer_name)->value('mobile');
 
         $textMessage = "Thank you! " . $request->customer_name . " for the payment of Rs. " . $request->TotalAmount . ". Regards, K & K International Lanka Pvt Ltd";
         $textBossMobile = "94" . $BossMobileNum;

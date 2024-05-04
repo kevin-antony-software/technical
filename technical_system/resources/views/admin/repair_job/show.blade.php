@@ -36,7 +36,8 @@
         <div class="row p-2 ">
             <div class="col-6">
                 @if ($repair_job->current_status_id == 1)
-                    <a href="{{ route('repair_job.start', $repair_job) }}" class="btn btn-block btn-success">Start Job</a>
+                    <a href="{{ route('repair_job.start', $repair_job) }}" class="btn btn-block btn-success">Start
+                        Job</a>
                 @elseif($repair_job->current_status_id == 2)
                     <div class="row">
                         <div class="col-6">
@@ -51,10 +52,12 @@
                         </div>
                     </div>
                 @elseif($repair_job->current_status_id == 3)
-                    <a href="{{ route('repair_job.close', $repair_job->id) }}" class="btn btn-block btn-success">Close Job
+                    <a href="{{ route('repair_job.close', $repair_job->id) }}" class="btn btn-block btn-success">Close
+                        Job
                     </a>
                 @elseif($repair_job->current_status_id == 4)
-                    <a href="{{ route('repair_job.deliverPage', $repair_job->id) }}" class="btn btn-block btn-success">Deliver
+                    <a href="{{ route('repair_job.deliverPage', $repair_job->id) }}"
+                        class="btn btn-block btn-success">Deliver
                         Job</a>
                 @endif
             </div>
@@ -78,7 +81,8 @@
             </div>
 
             <div class="col-6">
-                <a href="{{ route('repair_job.edit', $repair_job->id) }}" class="btn btn-block btn-primary">Edit job</a>
+                <a href="{{ route('repair_job.edit', $repair_job->id) }}" class="btn btn-block btn-primary">Edit
+                    job</a>
             </div>
         </div>
         {{-- @endcan --}}
@@ -92,21 +96,21 @@
                     <td style="width:50%">
                         <div class="px-5">
                             {{-- @can('director-only') --}}
-                                <form action="{{ route('repair_job.changeWarranty', $repair_job->id) }}" method="post">
-                                    @csrf
-                                    <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" id="exampleCheck1"
-                                            @if ($repair_job->warranty_type == 'With-Warranty') @checked(true) @endif
-                                            onChange="this.form.submit()">
-                                        <label class="form-check-label" for="exampleCheck1">
-                                            @if ($repair_job->warranty_type == 'With-Warranty')
-                                                With Warranty
-                                            @else
-                                                Without Warranty
-                                            @endif
-                                        </label>
-                                    </div>
-                                </form>
+                            <form action="{{ route('repair_job.changeWarranty', $repair_job->id) }}" method="post">
+                                @csrf
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1"
+                                        @if ($repair_job->warranty_type == 'With-Warranty') @checked(true) @endif
+                                        onChange="this.form.submit()">
+                                    <label class="form-check-label" for="exampleCheck1">
+                                        @if ($repair_job->warranty_type == 'With-Warranty')
+                                            With Warranty
+                                        @else
+                                            Without Warranty
+                                        @endif
+                                    </label>
+                                </div>
+                            </form>
                             {{-- @endcan --}}
                         </div>
                     </td>
@@ -182,15 +186,17 @@
             @endforeach
 
         </table>
+        @isset($images)
+            @foreach ($images as $image)
+                <div class="col-12 pt-2">
+                    <img src="{{ URL::asset($image) }}" style="width: 100%" />
+                    {{-- <img src="{{ asset($image) }}" style="width: 100%" /> --}}
+                    <p>{{ URL::asset($image) }}</p>
+                    {{-- <p>{{ asset($image) }}</p> --}}
+                </div>
+            @endforeach
+        @endisset
 
-        @foreach ($images as $image)
-            <div class="col-12 pt-2">
-                <img src="{{ URL::asset($image) }}" style="width: 100%" />
-                {{-- <img src="{{ asset($image) }}" style="width: 100%" /> --}}
-                <p>{{ URL::asset($image) }}</p>
-                {{-- <p>{{ asset($image) }}</p> --}}
-            </div>
-        @endforeach
 
     </div>
 </x-admin.nav>

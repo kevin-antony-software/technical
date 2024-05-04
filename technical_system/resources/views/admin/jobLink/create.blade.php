@@ -69,14 +69,14 @@
                     @foreach ($jobs as $job)
                         {
                             label: "{!! $job->id !!}",
-                            dueAmount: "{!! $job->dueAmount !!}"
+                            dueAmount: "{!! $job->due_amount !!}"
                         },
                     @endforeach
                 ],
                 @for ($i = 1; $i <= 15; $i++)
                     $('#jobID{!! $i !!}').autocomplete({
                         source: plist,
-                        minLength: 2,
+                        minLength: 1,
                         select: function(event, ui) {
                             event.preventDefault();
                             $('#jobID{!! $i !!}').val(ui.item.label);

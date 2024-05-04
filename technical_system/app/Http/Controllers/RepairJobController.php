@@ -428,7 +428,12 @@ class RepairJobController extends Controller
         $arr['repair_job'] = $repairJob;
         $arr['components_added'] = RepairJobDetail::where('repair_job_id', $repairJob->id)->get();
         $folder = 'repair_images/job_' . $repairJob->id . '/';
-        $arr['images'] = File::files($folder);
+        if(File::exists($folder)){
+            $arr['images'] = File::files($folder);
+        }
+
+
+
         $arr['repair_job_statuses'] = RepairJobStatusDetail::where('repair_job_id', $repairJob->id)->orderBy('repair_job_status_id', 'asc')->get();
 
         return view('admin.repair_job.show')->with($arr);
@@ -465,7 +470,8 @@ class RepairJobController extends Controller
         $repairJob->warranty_type = $request->warranty_type;
         $repairJob->special_discount = $request->special_discount;
         if($repairJob->current_status_id > 2){
-            $repairJob->final_total = $repairJob->total - $repairJob->discount - $repairJob->special_discount;
+            $repairJob->final_total = $repairJob->final_total - $repairJob->special_discount;
+            $repairJob->due_amount = $repairJob->final_total;
         }
         $repairJob->save();
         return to_route('repair_job.index')->with('message', 'Repair Job updated');

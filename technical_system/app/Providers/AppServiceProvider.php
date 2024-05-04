@@ -45,7 +45,8 @@ class AppServiceProvider extends ServiceProvider
                 $user->position == 'admin' ||
                 $user->position == 'director' ||
                 $user->position == 'manager' ||
-                $user->position == 'senior-tech-executive'
+                $user->position == 'senior-tech-executive' ||
+                $user->position == 'sales-executive'
             ) {
                 return true;
             } else {

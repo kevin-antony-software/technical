@@ -97,7 +97,10 @@ class ComponentPurchaseController extends Controller
      */
     public function show(ComponentPurchase $componentPurchase)
     {
-        //
+        return view('admin.component_purchase.show', [
+            'component_purchase' => $componentPurchase,
+            'component_pruchase_details' => ComponentPurchaseDetail::where('component_purchase', $componentPurchase->id)->get(),
+        ]);
     }
 
     /**

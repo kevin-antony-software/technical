@@ -17,6 +17,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepairJobController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Models\CourierWeightPrice;
 use Illuminate\Support\Facades\Route;
@@ -35,19 +36,19 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('note', NoteController::class);
-    Route::get('/user/{id}', [UserController::class, 'changePassword'])->name('user.changePassword')->middleware('can:admin-only');
-    Route::post('/user/changePasswordSave', [UserController::class, 'changePasswordSave'])->name('user.changePasswordSave')->middleware('can:admin-only');
-    Route::resource('user', UserController::class)->middleware('can:admin-only');
-    Route::resource('customer', CustomerController::class);
-    Route::resource('component', ComponentController::class);
-    Route::resource('component_category', ComponentCategoryController::class);
-    Route::resource('machine_model', MachineModelController::class);
-    Route::resource('component_stock', ComponentStockController::class);
-    Route::resource('component_purchase', ComponentPurchaseController::class);
+    Route::get('/user/{id}', [UserController::class, 'changePassword'])->name('user.changePassword')->middleware('can:director-only');
+    Route::post('/user/changePasswordSave', [UserController::class, 'changePasswordSave'])->name('user.changePasswordSave')->middleware('can:director-only');
+    Route::resource('user', UserController::class)->middleware('can:director-only');
+    Route::resource('customer', CustomerController::class)->middleware('can:senior-tech-executive-only');
+    Route::resource('component', ComponentController::class)->middleware('can:managers-only');
+    Route::resource('component_category', ComponentCategoryController::class)->middleware('can:managers-only');
+    Route::resource('machine_model', MachineModelController::class)->middleware('can:managers-only');
+    Route::resource('component_stock', ComponentStockController::class)->middleware('can:managers-only');
+    Route::resource('component_purchase', ComponentPurchaseController::class)->middleware('can:managers-only');
     Route::resource('courier_weight_charge', CourierWeightPriceController::class);
     Route::resource('common_issue', CommonIssueController::class);
 
@@ -65,21 +66,24 @@ Route::middleware('auth')->group(function () {
     Route::post('repair_job/uploadImageSave/{job}', [RepairJobController::class, 'uploadImageSave'])->name('repair_job.uploadImageSave');
     Route::resource('repair_job', RepairJobController::class);
 
-    Route::resource('bank', BankController::class);
-    Route::resource('bank_detail', BankDetailController::class);
-    Route::resource('cash', CashController::class);
+    Route::resource('bank', BankController::class)->middleware('can:director-only');
+    Route::resource('bank_detail', BankDetailController::class)->middleware('can:director-only');
+    Route::resource('cash', CashController::class)->middleware('can:director-only');
 
     Route::get('cheque/returnCheque/{cheque}', [ChequeController::class, 'returnCheque'])->name('cheque.returnCheque')->middleware('can:director-only');
     Route::post('cheque/passCheque/{cheque}', [ChequeController::class, 'passCheque'])->name('cheque.passCheque')->middleware('can:director-only');
-    Route::resource('cheque', ChequeController::class);
+    Route::resource('cheque', ChequeController::class)->middleware('can:director-only');
 
-    Route::resource('expense', ExpenseController::class);
+    Route::resource('expense', ExpenseController::class)->middleware('can:senior-tech-executive-only');
 
-    Route::get('payment/print/{id}', [PaymentController::class, 'print'])->name('payment.print');
-    Route::put('payment/payment_receive/{id}', [PaymentController::class, 'payment_receive'])->name('payment.payment_receive');
-    Route::get('payment/link/{id}', [PaymentController::class, 'link'])->name('payment.link');
-    Route::post('payment/link_job/{id}', [PaymentController::class, 'link_job'])->name('payment.link_job');
-    Route::resource('payment', PaymentController::class);
+    Route::get('payment/print/{id}', [PaymentController::class, 'print'])->name('payment.print')->middleware('can:senior-tech-executive-only');
+    Route::put('payment/payment_receive/{id}', [PaymentController::class, 'payment_receive'])->name('payment.payment_receive')->middleware('can:senior-tech-executive-only');
+    Route::get('payment/link/{id}', [PaymentController::class, 'link'])->name('payment.link')->middleware('can:senior-tech-executive-only');
+    Route::put('payment/link_job/{id}', [PaymentController::class, 'link_job'])->name('payment.link_job')->middleware('can:senior-tech-executive-only');
+    Route::resource('payment', PaymentController::class)->middleware('can:senior-tech-executive-only');
+
+    Route::get('report/closed_jobs', [ReportController::class, 'closed_jobs'])->name('report.closed_jobs');
+    Route::get('report/today_closed_jobs', [ReportController::class, 'today_closed_jobs'])->name('report.today_closed_jobs');
 
 });
 

@@ -1,20 +1,21 @@
 <x-admin.nav>
     <div class="container pt-2">
-        <a class="btn btn-primary" href="{{ route('component_purchase.index') }}" role="button">Back to index</a>
         <table id="example" class="display">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Qty</th>
+                    <th>job id</th>
+                    <th>status</th>
+                    <th>user</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($component_pruchase_details as $component_pruchase_detail)
+                @foreach ($data1 as $item)
                     <tr>
-                        <td>{{ $component_pruchase_detail->component->id }}</td>
-                        <td>{{ $component_pruchase_detail->component->name }}</td>
-                        <td>{{ $component_pruchase_detail->qty }}</td>
+                        <td>{{ $item->id }}</td>
+                        <td>{{ $item->repair_job_id }}</td>
+                        <td>{{ $item->status->status }}</td>
+                        <td>{{ $item->user->name }}</td>
                     </tr>
                 @endforeach
             </tbody>

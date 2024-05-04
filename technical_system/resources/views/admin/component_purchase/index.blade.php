@@ -10,6 +10,7 @@
                     <th>User</th>
                     <th>Date</th>
                     <th>Action</th>
+                    <th>Show</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,11 +22,17 @@
                         <td>{{ $component_purchase->created_at }}</td>
                         <td>
                             @if ($component_purchase->status == 'Pending')
-                                <a class="btn btn-primary btn-sm" href="{{ route('component_purchase.edit', $component_purchase) }}"
+                                <a class="btn btn-primary btn-sm"
+                                    href="{{ route('component_purchase.edit', $component_purchase) }}"
                                     role="button">Approve</a>
                             @else
-                            {{$component_purchase->status}}
+                                {{ $component_purchase->status }}
                             @endif
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm"
+                                href="{{ route('component_purchase.show', $component_purchase) }}"
+                                role="button">Show</a>
                         </td>
                     </tr>
                 @endforeach
