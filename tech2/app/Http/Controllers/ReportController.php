@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\RepairJob;
 use App\Models\RepairJobStatusDetail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -27,4 +28,12 @@ class ReportController extends Controller
 
         ]);
     }
+
+    public function outstanding(){
+        return view('admin.report.outstanding', [
+            'repair_jobs' => RepairJob::where('due_amount', '>', 20)->get(),
+
+        ]);
+    }
+
 }

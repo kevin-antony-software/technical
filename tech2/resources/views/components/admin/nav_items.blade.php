@@ -119,6 +119,11 @@
                 <p>Today Closed Jobs</p>
             </a>
         </li>
-
+        <li class="nav-item">
+            <a href="{{ route('report.outstanding') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Outstanding</p>
+            </a>
+        </li>
     </ul>
 </li>

@@ -26,7 +26,7 @@ use Pest\Plugins\Only;
 
 Route::get('/', function () {
     // return view('admin.customer.index');
-    return to_route('customer.index');
+    return to_route('repair_job.index');
 })->middleware(['auth', 'verified']);
 
 Route::get('/dashboard', function () {
@@ -84,6 +84,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('report/closed_jobs', [ReportController::class, 'closed_jobs'])->name('report.closed_jobs');
     Route::get('report/today_closed_jobs', [ReportController::class, 'today_closed_jobs'])->name('report.today_closed_jobs');
+    Route::get('report/outstanding', [ReportController::class, 'outstanding'])->name('report.outstanding');
 
 });
 

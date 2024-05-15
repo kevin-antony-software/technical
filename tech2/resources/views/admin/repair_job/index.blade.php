@@ -43,7 +43,7 @@
         new DataTable('#example', {
             info: false,
             lengthChange: false,
-            pageLength: 20,
+            pageLength: 300,
             order: [0, 'desc'],
             layout: {
                 topStart: {

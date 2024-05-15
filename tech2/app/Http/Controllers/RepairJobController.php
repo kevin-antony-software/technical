@@ -14,7 +14,8 @@ use App\Models\RepairJobStatusDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Barryvdh\DomPDF\Facade\PDF;
+// use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
@@ -56,7 +57,9 @@ class RepairJobController extends Controller
 
         $customer = Customer::where('id', $repairJob->customer_id)->first();
         if ($customer->customer_type == 'end-customer') {
-            $this->sendSMS($customer->customer_name, "Repair Job Started for welding machine with job id " . $repairJob->id);
+            $textMessage = $customer->customer_name . ", Repair Job Started for welding machine with job id " . $repairJob->id;
+            $textBossMobile = $customer->mobile;
+            $this->sendSMS($textMessage, $textBossMobile);
         }
         $repairJob->save();
         return redirect()->route('repair_job.index');
@@ -123,7 +126,9 @@ class RepairJobController extends Controller
         if ($job->warranty_type == 'Without-Warranty') {
             $customer = Customer::where('id', $job->customer_id)->first();
             if ($customer->customer_type == 'end-customer') {
-                $this->sendSMS($customer->customer_name, "Repair Job Estimated for RETOP welding machine with job id " . $job->id . "cost of Rs " . $request->finalTotal . "/=");
+                $textMessage = $customer->customer_name . ", Repair Job Estimated for RETOP welding machine with job id " . $job->id . "cost of Rs " . $request->finalTotal . "/=";
+                $textBossMobile = $customer->mobile;
+                $this->sendSMS($textMessage, $textBossMobile);
             }
         }
         return redirect()->route('repair_job.index');
@@ -194,12 +199,18 @@ class RepairJobController extends Controller
         if ($job->warranty_type == 'Without-Warranty') {
             $job->due_amount = $request->finalTotal;
             if ($customer->customer_type == 'end-customer') {
-                $this->sendSMS($customer->customer_name, "Repair Job Closed for RETOP welding machine with job id " . $job->id . "cost of Rs " . $request->finalTotal . "/=");
+
+                $textMessage = $customer->customer_name . ", Repair Job Closed for RETOP welding machine with job id " . $job->id . "cost of Rs " . $request->finalTotal . "/=";
+                $textBossMobile = $customer->mobile;
+                $this->sendSMS($textMessage, $textBossMobile);
             }
         } else {
             $job->due_amount = 0;
             if ($customer->customer_type == 'end-customer') {
-                $this->sendSMS($customer->customer_name, "Repair Job Closed for RETOP welding machine with job id " . $job->id);
+                $textMessage = $customer->customer_name . ", Repair Job Closed for RETOP welding machine with job id " . $job->id;
+                $textBossMobile = $customer->mobile;
+                $this->sendSMS($textMessage, $textBossMobile);
+
             }
         }
 
@@ -246,7 +257,12 @@ class RepairJobController extends Controller
 
         $customer = Customer::where('id', $job->customer_id)->first();
         if ($customer->customer_type == 'end-customer') {
-            $this->sendSMS($customer->customer_name, "RETOP Welding machine with Repair Job " . $job->id . " Delivered with " . $job->promptOut);
+
+            $textMessage = $customer->customer_name . ", RETOP Welding machine with Repair Job " . $job->id . " Delivered with " . $job->promptOut;
+            $textBossMobile = $customer->mobile;
+            $this->sendSMS($textMessage, $textBossMobile);
+
+
         }
         return redirect()->route('repair_job.index');
     }
@@ -273,7 +289,7 @@ class RepairJobController extends Controller
     {
         return view('admin.repair_job.index', [
 
-            'repair_jobs' => RepairJob::orderBy('id', 'DESC')->get(),
+            'repair_jobs' => RepairJob::orderBy('id', 'DESC')->paginate(1200),
         ]);
     }
 
@@ -330,11 +346,11 @@ class RepairJobController extends Controller
 
         if ($jobRepairTimes == 1) {
             $textMessage = "this machine with serial " . $request->serial_number . " repair for " . $jobRepairTimes . 'times';
-            $textBossMobile = "94777770091";
+            $textBossMobile = "94743935005";
             $this->sendSMS($textMessage, $textBossMobile);
         } else if ($jobRepairTimes > 1) {
             $textMessage = "this machine with serial " . $request->serial_number . " repair for " . $jobRepairTimes . 'times';;
-            $textBossMobile = "94777770091";
+            $textBossMobile = "94743935005";
             $this->sendSMS($textMessage, $textBossMobile);
             $textMessage = "this machine with serial " . $request->serial_number . " repair for " . $jobRepairTimes . 'times';
             $textBossMobile = "94777770091";
@@ -376,8 +392,8 @@ class RepairJobController extends Controller
             $extension = $file->getClientOriginalExtension();
             $files =  File::files($folder);
             $nextNum = count($files) + 1;
-            $namecreate= "image_".$id. "_" . $nextNum;
-            $finalname = $namecreate.".".$extension;
+            $namecreate = "image_" . $id . "_" . $nextNum;
+            $finalname = $namecreate . "." . $extension;
             $dest_photo = $folder . $finalname;
             $this->compress_image($file, $dest_photo, 25);
         }
@@ -387,8 +403,8 @@ class RepairJobController extends Controller
             $extension = $file->getClientOriginalExtension();
             $files =  File::files($folder);
             $nextNum = count($files) + 1;
-            $namecreate= "image_".$id. "_" . $nextNum;
-            $finalname = $namecreate.".".$extension;
+            $namecreate = "image_" . $id . "_" . $nextNum;
+            $finalname = $namecreate . "." . $extension;
             $dest_photo = $folder . $finalname;
             $this->compress_image($file, $dest_photo, 25);
         }
@@ -398,17 +414,17 @@ class RepairJobController extends Controller
             $extension = $file->getClientOriginalExtension();
             $files =  File::files($folder);
             $nextNum = count($files) + 1;
-            $namecreate= "image_".$id. "_" . $nextNum;
-            $finalname = $namecreate.".".$extension;
+            $namecreate = "image_" . $id . "_" . $nextNum;
+            $finalname = $namecreate . "." . $extension;
             $dest_photo = $folder . $finalname;
             $this->compress_image($file, $dest_photo, 25);
         }
 
-
         return redirect()->route('repair_job.index');
     }
 
-    public function compress_image($source_url, $destination_url, $quality) {
+    public function compress_image($source_url, $destination_url, $quality)
+    {
         $info = getimagesize($source_url);
 
         if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
@@ -428,7 +444,7 @@ class RepairJobController extends Controller
         $arr['repair_job'] = $repairJob;
         $arr['components_added'] = RepairJobDetail::where('repair_job_id', $repairJob->id)->get();
         $folder = 'repair_images/job_' . $repairJob->id . '/';
-        if(File::exists($folder)){
+        if (File::exists($folder)) {
             $arr['images'] = File::files($folder);
         }
 
@@ -469,7 +485,7 @@ class RepairJobController extends Controller
         $repairJob->method_came_in = $request->method_came_in;
         $repairJob->warranty_type = $request->warranty_type;
         $repairJob->special_discount = $request->special_discount;
-        if($repairJob->current_status_id > 2){
+        if ($repairJob->current_status_id > 2) {
             $repairJob->final_total = $repairJob->final_total - $repairJob->special_discount;
             $repairJob->due_amount = $repairJob->final_total;
         }
@@ -484,6 +500,5 @@ class RepairJobController extends Controller
     {
         $repairJob->delete();
         return to_route('repair_job.index')->with('message', 'Repair Job deleted');
-
     }
 }
