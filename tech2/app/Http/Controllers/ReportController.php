@@ -16,24 +16,60 @@ class ReportController extends Controller
     public function closed_jobs()
     {
 
-               return view('admin.report.closed_jobs', [
+        return view('admin.report.closed_jobs', [
             'data1' => RepairJobStatusDetail::where('repair_job_status_id', '=', 4)->get(),
 
         ]);
     }
 
-    public function today_closed_jobs(){
+    public function today_closed_jobs()
+    {
         return view('admin.report.today_closed_jobs', [
             'data1' => RepairJobStatusDetail::where('repair_job_status_id', '=', 4)->whereDate('created_at', Carbon::today())->get(),
 
         ]);
     }
 
-    public function outstanding(){
+    public function outstanding()
+    {
         return view('admin.report.outstanding', [
             'repair_jobs' => RepairJob::where('due_amount', '>', 20)->get(),
 
         ]);
     }
 
+
+    public function closed_summary()
+    {
+
+        $data = DB::table('repair_job_status_details')
+            ->join('users', 'repair_job_status_details.user_id', '=', 'users.id')
+            ->select(DB::raw('users.name as user_name, repair_job_status_details.user_id, count(repair_job_status_details.id) as count_id, MONTH(repair_job_status_details.created_at) as month, YEAR(repair_job_status_details.created_at) as year'))
+            ->groupby(DB::raw('users.name, repair_job_status_details.user_id, YEAR(repair_job_status_details.created_at) ASC, MONTH(repair_job_status_details.created_at) ASC'))
+            ->where('repair_job_status_details.repair_job_status_id', 4)
+            ->get()->toArray();
+
+        // dd($data);
+
+        $year = [];
+        $month = [];
+        $user_name = [];
+        $closed_jobs = [];
+
+        foreach ($data as $item){
+            array_push($year, $item->year);
+            array_push($month, $item->month);
+            array_push($user_name, $item->user_name);
+            array_push($closed_jobs, $item->count_id);
+
+        }
+        return view('admin.report.closed_summary', [
+            'year' => $year,
+            'month' => $month,
+            'user_name' => $user_name,
+            'closed_jobs' => $closed_jobs,
+            'data' => $data,
+
+        ]);
+    }
 }

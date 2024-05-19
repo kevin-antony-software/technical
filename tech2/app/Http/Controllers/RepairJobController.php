@@ -262,7 +262,6 @@ class RepairJobController extends Controller
             $textBossMobile = $customer->mobile;
             $this->sendSMS($textMessage, $textBossMobile);
 
-
         }
         return redirect()->route('repair_job.index');
     }

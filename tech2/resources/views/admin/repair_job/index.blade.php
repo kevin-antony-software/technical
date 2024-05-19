@@ -13,6 +13,7 @@
                     <th>Warranty </th>
                     <th>Previous </th>
                     <th>Total Amount Rs.</th>
+                    <th>Date Created</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                             <td> {{ $repair_job->warranty_type }}</td>
                             <td> {{ $repair_job->repairTimes }} </td>
                             <td> {{ $repair_job->final_total }}</td>
+                            <td> {{ $repair_job->created_at }}</td>
                         </tr>
                     @endforeach
                 @else

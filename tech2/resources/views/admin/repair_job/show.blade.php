@@ -13,7 +13,7 @@
         <div class="fixed-btn">
             <div class="row p-2">
                 <div class="col-12">
-                    <a href="{{ route('repair_job.index') }}" class="btn btn-block btn-primary"><i
+                    <a href="{{ url()->previous() }}" class="btn btn-block btn-primary"><i
                             class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
                 </div>
             </div>
