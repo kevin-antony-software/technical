@@ -102,7 +102,7 @@
                         to Index</a>
                 </div>
                 <div class="col-6">
-                    <button type="submit" class="btn btn-block btn-primary">Save New Repair Job</button>
+                    <button type="submitButton" class="btn btn-block btn-primary">Save New Repair Job</button>
                 </div>
             </div>
         </form>

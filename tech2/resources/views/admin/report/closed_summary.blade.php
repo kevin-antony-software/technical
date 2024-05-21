@@ -29,7 +29,10 @@
             info: false,
             lengthChange: false,
             pageLength: 50,
-            order: [[0, 'desc'], [1, 'desc']],
+            order: [
+                [0, 'desc'],
+                [1, 'desc']
+            ],
             layout: {
                 topStart: {
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
@@ -37,5 +40,8 @@
             }
         });
     </script>
+
+
+
 
 </x-admin.nav>

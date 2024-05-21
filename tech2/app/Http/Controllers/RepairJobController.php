@@ -26,6 +26,46 @@ class RepairJobController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function find()
+    {
+        return view('admin.repair_job.find', [
+            'customers' => Customer::select('name')->get(),
+            'machine_models' => MachineModel::select('name')->get(),
+        ]);
+    }
+
+    public function show_find(Request $request)
+    {
+        if ($request->job_id == ""){
+            $customer = $request->customer_name;
+            $model = $request->model;
+            if($customer != "" && $model !=""){
+                $customer_id = Customer::where('name', $customer)->value('id');
+                $model_id = MachineModel::where('name', $model)->value('id');
+                $repair_jobs = RepairJob::orderBy('id', 'DESC')->where('customer_id', $customer_id)->where('machine_model_id', $model_id)->get();
+            } else if($customer == "") {
+                $model_id = MachineModel::where('name', $model)->value('id');
+                $repair_jobs = RepairJob::orderBy('id', 'DESC')->where('machine_model_id', $model_id)->get();
+            } else{
+                $customer_id = Customer::where('name', $customer)->value('id');
+                $repair_jobs = RepairJob::orderBy('id', 'DESC')->where('customer_id', $customer_id)->get();
+            }
+            return view('admin.repair_job.show_find',[
+                'customers' => Customer::select('name')->get(),
+                'machine_models' => MachineModel::select('name')->get(),
+                'repair_jobs' => $repair_jobs,
+            ]);
+        } else {
+            return view('admin.repair_job.show_find',[
+                'customers' => Customer::select('name')->get(),
+                'machine_models' => MachineModel::select('name')->get(),
+                'repair_jobs' => RepairJob::orderBy('id', 'DESC')->where('id', $request->job_id)->get(),
+            ]);
+        }
+
+    }
+
     public function printDetail($id)
     {
         $job = RepairJob::where('id', $id)->first();
@@ -210,7 +250,6 @@ class RepairJobController extends Controller
                 $textMessage = $customer->customer_name . ", Repair Job Closed for RETOP welding machine with job id " . $job->id;
                 $textBossMobile = $customer->mobile;
                 $this->sendSMS($textMessage, $textBossMobile);
-
             }
         }
 
@@ -261,7 +300,6 @@ class RepairJobController extends Controller
             $textMessage = $customer->customer_name . ", RETOP Welding machine with Repair Job " . $job->id . " Delivered with " . $job->promptOut;
             $textBossMobile = $customer->mobile;
             $this->sendSMS($textMessage, $textBossMobile);
-
         }
         return redirect()->route('repair_job.index');
     }
@@ -384,7 +422,7 @@ class RepairJobController extends Controller
     public function uploadImageSave($id, Request $request)
     {
         $job = RepairJob::where('id', $id)->first();
-        $folder = 'repair_images/job_' . $id . '/';
+        $folder = 'public/repair_images/job_' . $id . '/';
 
         if ($request->hasFile('image1')) {
             $file = $request->file('image1');
@@ -442,7 +480,7 @@ class RepairJobController extends Controller
     {
         $arr['repair_job'] = $repairJob;
         $arr['components_added'] = RepairJobDetail::where('repair_job_id', $repairJob->id)->get();
-        $folder = 'repair_images/job_' . $repairJob->id . '/';
+        $folder = 'public/repair_images/job_' . $repairJob->id . '/';
         if (File::exists($folder)) {
             $arr['images'] = File::files($folder);
         }

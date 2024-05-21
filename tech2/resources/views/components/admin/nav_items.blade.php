@@ -5,6 +5,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('repair_job.find') }}" class="nav-link">
+        <i class="nav-icon far fa-circle text-success"></i>
+        <p class="text-success">Find job</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('common_issue.index') }}" class="nav-link">
         <i class="nav-icon far fa-circle"></i>
         <p class="text">Common issue</p>

@@ -25,7 +25,9 @@ class ReportController extends Controller
     public function today_closed_jobs()
     {
         return view('admin.report.today_closed_jobs', [
-            'data1' => RepairJobStatusDetail::where('repair_job_status_id', '=', 4)->whereDate('created_at', Carbon::today())->get(),
+            'data1' => RepairJobStatusDetail::where('repair_job_status_id', '=', 4)
+                ->whereDate('created_at', Carbon::today())
+                ->get(),
 
         ]);
     }
@@ -49,25 +51,8 @@ class ReportController extends Controller
             ->where('repair_job_status_details.repair_job_status_id', 4)
             ->get()->toArray();
 
-        // dd($data);
-
-        $year = [];
-        $month = [];
-        $user_name = [];
-        $closed_jobs = [];
-
-        foreach ($data as $item){
-            array_push($year, $item->year);
-            array_push($month, $item->month);
-            array_push($user_name, $item->user_name);
-            array_push($closed_jobs, $item->count_id);
-
-        }
         return view('admin.report.closed_summary', [
-            'year' => $year,
-            'month' => $month,
-            'user_name' => $user_name,
-            'closed_jobs' => $closed_jobs,
+
             'data' => $data,
 
         ]);

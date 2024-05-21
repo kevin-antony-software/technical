@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('courier_weight_charge', CourierWeightPriceController::class);
     Route::resource('common_issue', CommonIssueController::class);
 
+    Route::get('repair_job/find', [RepairJobController::class, 'find'])->name('repair_job.find');
+    Route::post('repair_job/show_find', [RepairJobController::class, 'show_find'])->name('repair_job.show_find');
     Route::get('repair_job/printDetail/{id}', [RepairJobController::class, 'printDetail'])->name('repair_job.printDetail');
     Route::get('repair_job/print/{id}', [RepairJobController::class, 'print'])->name('repair_job.print');
     Route::get('repair_job/start/{id}', [RepairJobController::class, 'start'])->name('repair_job.start');
