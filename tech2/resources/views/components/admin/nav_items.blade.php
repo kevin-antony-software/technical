@@ -5,9 +5,21 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('courier_pickup.index') }}" class="nav-link">
+        <i class="nav-icon far fa-circle text-primary"></i>
+        <p class="text-primary">Courier Pickup</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('courier_packing.index') }}" class="nav-link">
+        <i class="nav-icon far fa-circle text-primary"></i>
+        <p class="text-primary">Courier Packing</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('repair_job.find') }}" class="nav-link">
-        <i class="nav-icon far fa-circle text-success"></i>
-        <p class="text-success">Find job</p>
+        <i class="nav-icon far fa-circle"></i>
+        <p class="text">Find job</p>
     </a>
 </li>
 <li class="nav-item">
@@ -74,6 +86,18 @@
         <a href="{{ route('courier_weight_charge.index') }}" class="nav-link">
             <i class="nav-icon far fa-circle"></i>
             <p class="text">Courier Weight</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('courier_pickup.index') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Courier Pickup</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('courier_packing.index') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Courier Packing</p>
         </a>
     </li>
 @endcan

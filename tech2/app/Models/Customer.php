@@ -16,5 +16,10 @@ class Customer extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function courier_pickups()
+    {
+        return $this->hasMany(CourierPickup::class);
+    }
     protected $fillable = ['customer_type','name', 'address', 'mobile', 'land_phone', 'company'];
 }

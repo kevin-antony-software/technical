@@ -9,6 +9,8 @@ use App\Http\Controllers\ComponentCategoryController;
 use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\ComponentPurchaseController;
 use App\Http\Controllers\ComponentStockController;
+use App\Http\Controllers\CourierPackingController;
+use App\Http\Controllers\CourierPickupController;
 use App\Http\Controllers\CourierWeightPriceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -30,7 +32,7 @@ use Pest\Plugins\Only;
 Route::get('/', function () {
     // return view('admin.customer.index');
     return to_route('dashboard.index');
-})->middleware(['auth', 'verified']);
+})->middleware(['auth']);
 
 Route::middleware('auth')->group(function () {
 
@@ -75,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::post('cheque/passCheque/{cheque}', [ChequeController::class, 'passCheque'])->name('cheque.passCheque')->middleware('can:director-only');
     Route::resource('cheque', ChequeController::class)->middleware('can:director-only');
 
+
     Route::resource('expense', ExpenseController::class)->middleware('can:senior-tech-executive-only');
 
     Route::get('payment/print/{id}', [PaymentController::class, 'print'])->name('payment.print')->middleware('can:senior-tech-executive-only');
@@ -87,6 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::get('report/today_closed_jobs', [ReportController::class, 'today_closed_jobs'])->name('report.today_closed_jobs');
     Route::get('report/outstanding', [ReportController::class, 'outstanding'])->name('report.outstanding');
     Route::get('report/closed_summary', [ReportController::class, 'closed_summary'])->name('report.closed_summary');
+
+    Route::resource('courier_pickup', CourierPickupController::class);
+    Route::resource('courier_packing', CourierPackingController::class);
 
 });
 
