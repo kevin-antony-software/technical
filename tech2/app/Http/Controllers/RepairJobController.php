@@ -359,7 +359,8 @@ class RepairJobController extends Controller
         $idIN = DB::select("SHOW TABLE STATUS LIKE 'repair_jobs'");
         $next_id = $idIN[0]->Auto_increment;
 
-        $folder = 'repair_images/job_' . $next_id;
+        // $folder = 'repair_images/job_' . $next_id;
+        $folder = 'public/repair_images/job_' . $next_id;
         if (!File::isDirectory($folder)) {
             File::makeDirectory($folder, 0777, true, true);
         }

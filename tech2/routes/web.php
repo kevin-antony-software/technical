@@ -11,6 +11,7 @@ use App\Http\Controllers\ComponentPurchaseController;
 use App\Http\Controllers\ComponentStockController;
 use App\Http\Controllers\CourierWeightPriceController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MachineModelController;
 use App\Http\Controllers\NoteController;
@@ -20,25 +21,23 @@ use App\Http\Controllers\RepairJobController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Models\CourierWeightPrice;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Can;
 use Pest\Plugins\Only;
 
+
 Route::get('/', function () {
     // return view('admin.customer.index');
-    return to_route('repair_job.index');
+    return to_route('dashboard.index');
 })->middleware(['auth', 'verified']);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-    // return redirect()->intended(route('/'));
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
 
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('dashboard', DashboardController::class);
     Route::resource('note', NoteController::class);
     Route::get('/user/{id}', [UserController::class, 'changePassword'])->name('user.changePassword')->middleware('can:director-only');
     Route::post('/user/changePasswordSave', [UserController::class, 'changePasswordSave'])->name('user.changePasswordSave')->middleware('can:director-only');
